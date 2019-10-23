@@ -4,7 +4,8 @@
   "description": "Web client for tracking issues in code, business or IT environment.",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon app"
+    "test": "nodemon app",
+    "start": "node app"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "pg": "^7.12.1"
+  },
+  "engines": {
+    "node": "11.x"
   }
 }
