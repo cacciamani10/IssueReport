@@ -1,0 +1,28 @@
+{
+  "name": "issue-report",
+  "version": "1.0.0",
+  "description": "Web client for tracking issues in code, business or IT environment.",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cacciamani10/IssueReport.git"
+  },
+  "keywords": [
+    "tracker",
+    "issue",
+    "bug"
+  ],
+  "author": "Jacob Cacciamani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cacciamani10/IssueReport/issues"
+  },
+  "homepage": "https://github.com/cacciamani10/IssueReport#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
+  }
+}
