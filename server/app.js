@@ -21,7 +21,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
   });
 
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.send('<h1>Hello</h1>');
 });
