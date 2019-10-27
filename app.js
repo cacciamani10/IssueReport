@@ -14,14 +14,6 @@ const client = new Client({
 
 client.connect();
 
-client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-    if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-    client.end();
-  });
-
 
 app.use(express.static('public'));
 app.get('/', (req, res) => {
@@ -30,12 +22,16 @@ app.get('/', (req, res) => {
 
 
 app.get('/getIssues', (req, res) => {
-  const string = 'SELECT row_to_json(*) FROM tickets';
+  const string = 'SELECT * FROM tickets';
   client.query(string, (err, data) => {
     if (err)
       res.writeHead(500);
     else {
-        res.json(data);
+      let jsonRows = '';
+      for (let row of res.rows) {
+        jsonRows += JSON.stringify(row);
+      }
+      res.send(jsonRows);
     }
   })
 });
