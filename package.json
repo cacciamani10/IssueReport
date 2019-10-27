@@ -24,7 +24,8 @@
   "homepage": "https://github.com/cacciamani10/IssueReport#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "uuid": "^3.3.3"
   },
   "engines": {
     "node": "11.x"
