@@ -1,3 +1,12 @@
 div.issues {
-    padding-top: 10px;
+    padding-top: 30px;
+}
+
+div.card-header {
+    font-weight: 500;
+}
+
+div.card {
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
