@@ -5,7 +5,11 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
-        console.log(res.json());
+        res.json().then(data => {
+            for (let item of data) {
+                console.log(item);
+            }
+        });
     })
     .catch(err => {
         console.log(err);
