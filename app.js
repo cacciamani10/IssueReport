@@ -15,7 +15,7 @@ const client = new Client({
 
 client.connect();
 
-app.use(bodyParser().json());
+app.use(bodyParser.json());
 app.user(bodyParser.urlencoded({ extended: flase }));
 app.use(express.static('public'));
 app.get('/', (req, res) => {
