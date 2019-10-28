@@ -8,20 +8,23 @@ const testUser ='6f805bae-6988-486c-a4ac-039f7cc98b5b';
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
+// Init DB
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: true
 });
-
 client.connect();
 
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+
+// Routes
 app.get('/', (req, res) => {
     res.send(path.join(__dirname, 'public', index));
 });
-
 
 app.get('/getIssues', (req, res) => {
   const string = 'SELECT * FROM tickets;';
