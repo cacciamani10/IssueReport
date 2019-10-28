@@ -1,5 +1,5 @@
-const url = window.location.hostname;
-fetch(url + '/getIssues')
+//const url = window.location.hostname;
+fetch('/getIssues')
     .then(res => {
         res.json()
     })
