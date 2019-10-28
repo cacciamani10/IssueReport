@@ -35,7 +35,7 @@ function filterItems() {
     const search = document.getElementById('search-bar').value;
     let tickets = document.getElementById('issues');
     tickets.innerHTML = '';
-    for (let item of tickets) {
+    for (let item of issues) {
         found = false;
         for (let [key, value] of Object.entries(item)) {
             if (value.includes(search)) {
