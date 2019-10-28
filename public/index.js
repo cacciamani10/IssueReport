@@ -42,21 +42,21 @@ function filterItems() {
                 found = true;
                 break;
             }
-            if(found) {
+        }
+        if(found) {
             tickets.innerHTML += 
-                `<div class="card" style="margin: 12px;">
-                    <div class="card-header">
-                        Ticket ID: ${item.ticket_id}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">${item.ticket_subject}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${item.created_by}</h6>
-                        <p class="card-text">${item.ticket_description}</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>`
-            }
+            `<div class="card" style="margin: 12px;">
+                <div class="card-header">
+                    Ticket ID: ${item.ticket_id}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">${item.ticket_subject}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${item.created_by}</h6>
+                    <p class="card-text">${item.ticket_description}</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>`
         }
     }
 }
