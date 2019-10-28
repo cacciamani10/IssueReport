@@ -60,7 +60,7 @@ function issueToString(item) {
         res +=
             `<span class="badge badge-success">Resolved</span>
             <div class="card-footer text-muted">
-                Resolved by: ${item.resolved_by} on ${resolved_on}
+                Resolved by: ${item.resolved_by} on ${item.resolved_on}
             </div>
         </div>
     </div>`
