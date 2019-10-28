@@ -43,12 +43,14 @@ app.post('/create', (req, res) => {
   console.log('Processing request from', req.body.createdBy);
   const string = 'INSERT INTO tickets(ticket_id, created_by, ticket_subject, ticket_description, resolved) VALUES($1, $2, $3, $4, $5) RETURNING *;';
   const values = [ uuidv4(), testUser, req.body.subject, req.body.description, false];
-  if (err) {
-    console.log(err.stack);
-  }
-  else {
-    console.log('Added', res.rows[0]);
-  }
+  client.query(string, values, (err, data) => {
+    if (err) {
+      console.log(err.stack);
+    }
+    else {
+      console.log('Added', data.rows[0]);
+    }
+  })
 });
 
 app.listen(PORT);
