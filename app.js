@@ -56,10 +56,8 @@ app.post('/create', (req, res) => {
     if (err) {
       console.log(err.stack);
     }
-    else {
-      res.send(data.rows[0]);
-    }
   })
+  res.redirect('/');
 });
 
 app.listen(PORT);
