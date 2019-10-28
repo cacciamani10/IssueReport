@@ -11,7 +11,7 @@ fetch('/getIssues')
             for (let item of data) {
                 issues.push(item);
                 tickets.innerHTML += 
-                `<div class="card" style="margin: 12px 25px;">
+                `<div class="card" style="margin: 30px 12px;">
                     <div class="card-header" style="font-weight: 500;">
                         Ticket ID: ${item.ticket_id}
                     </div>
