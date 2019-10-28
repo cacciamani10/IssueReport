@@ -30,7 +30,7 @@ app.get('/getIssues', (req, res) => {
       res.writeHead(500);
     else {
       let jsonRows = '';
-      for (let row of res.rows) {
+      for (let row of data.rows) {
         jsonRows += JSON.stringify(row);
       }
       res.send(jsonRows);
