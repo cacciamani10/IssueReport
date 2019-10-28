@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="create.css">
     <script src="create.js"></script>
     <title>Issue Tracker</title>
 </head>
@@ -16,28 +17,28 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <a class="navbar-brand" href="#">Issue Tracker</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/index.html">Home </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="#">Create Ticket <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div id="add-ticket-form">
+    <div class="add-ticket-form">
         <form action="/create" method="post" onsubmit="return false;">
-            <div class="form-group">    
+            <div class="form-group row">    
                 <label for="subject">Subject</label>
-                <input name="subject" id="subject" type="text">
+                <input name="subject" id="subject" type="text" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="Description"></textarea> 
+                <textarea class="form-control" name="description" id="description" placeholder="Enter a description" required></textarea> 
             </div>
             <div class="form-group">
                 <label for="createdBy">Created By</label>
-                <input type="text" name="createdBy" id="createdBy" placeholder="Created By">
+                <input class="form-control" type="text" name="createdBy" id="createdBy" placeholder="Created By">
             </div>
             <button type="submit">Submit</button>
         </form>
