@@ -12,7 +12,7 @@ fetch('/getIssues')
                 tickets.innerHTML += 
                 `<div class="card" style="margin: 12px;">
                     <div class="card-header">
-                        ${item.ticket_id}
+                        Ticket ID: ${item.ticket_id}
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">${item.ticket_subject}</h5>
