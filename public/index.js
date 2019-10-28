@@ -32,13 +32,13 @@ fetch('/getIssues')
 
 function filterItems() {
     let found;
-    const search = document.getElementById('search-bar').value;
+    const regex = new RegExp(document.getElementById('search-bar').value, 'i');
     let tickets = document.getElementById('issues');
     tickets.innerHTML = '';
     for (let item of issues) {
         found = false;
         for (let [key, value] of Object.entries(item)) {
-            if (value.includes(search)) {
+            if (regex.test(value)) {
                 found = true;
                 break;
             }
