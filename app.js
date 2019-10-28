@@ -36,6 +36,7 @@ app.get('/getIssues', (req, res) => {
       for (let row of data.rows) {
         jsonRows += JSON.stringify(row);
       }
+      console.log('Sending', jsonRows);
       res.send(jsonRows);
     }
   })
