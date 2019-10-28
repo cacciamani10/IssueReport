@@ -48,7 +48,7 @@ app.post('/create', (req, res) => {
       console.log(err.stack);
     }
     else {
-      console.log('Added', data.rows[0]);
+      res.send(data.rows[0]);
     }
   })
 });
