@@ -23,7 +23,7 @@ app.use(express.static('public'));
 
 // Routes
 app.get('/', (req, res) => {
-    res.send(path.join(__dirname, 'public', index));
+  res.send(path.join(__dirname, 'public', index));
 });
 
 app.get('/getIssues', (req, res) => {
@@ -41,6 +41,10 @@ app.get('/getIssues', (req, res) => {
       res.send(jsonRows);
     }
   })
+});
+
+app.get('/create', (req, res) => {
+  res.send(path.join(__dirname, 'public', create));
 });
 
 app.post('/create', (req, res) => {
