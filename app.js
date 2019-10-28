@@ -40,8 +40,9 @@ app.get('/getIssues', (req, res) => {
 
 app.post('/create', (req, res) => {
   console.log(req.body);
+  console.log('Processing request from', req.body.created-by);
   const string = 'INSERT INTO tickets(ticket_id, created_by, ticket_subject, ticket_description, resolved) VALUES($1, $2, $3, $4, $5) RETURNING *;';
-  const values = [ uuidv4(), testUser, req.subject, req,description, false];
+  const values = [ uuidv4(), testUser, req.body.subject, req.body.description, false];
   if (err) {
     console.log(err.stack);
   }
