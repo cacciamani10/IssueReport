@@ -3,11 +3,22 @@ const express = require('express');
 const { Client } = require('pg');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bodyParser = require('body-parser');
 const testUser ='6f805bae-6988-486c-a4ac-039f7cc98b5b';
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
+passport.user(new GoogleStrategy(
+  {
+    clientID: '', // googleCLientID
+    clientSecret: '',
+    callbackURL: '/auth/google/callback'
+  }, 
+  (accessToken) => console.log(accessToken)
+));
 
 // Init DB
 const client = new Client({
