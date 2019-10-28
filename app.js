@@ -32,10 +32,11 @@ app.get('/getIssues', (req, res) => {
     if (err)
       res.writeHead(500);
     else {
-      let jsonRows = '';
+      let jsonRows = [];
       for (let row of data.rows) {
-        jsonRows += JSON.stringify(row);
+        jsonRows.push(row);
       }
+      jsonRows = JSON.stringify(jsonRows);
       console.log('Sending', jsonRows);
       res.send(jsonRows);
     }
