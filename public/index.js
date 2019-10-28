@@ -5,7 +5,7 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
-        console.log(data);
+        console.log(res);
     })
     .catch(err => {
         console.log(err);
