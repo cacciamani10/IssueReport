@@ -30,7 +30,7 @@ fetch('/getIssues')
                     tickets.innerHTML +=
                         `<span class="badge badge-success">Resolved</span>
                         <div class="card-footer text-muted">
-                            Resolved by: ${item.resolved_by}
+                            Resolved by: ${item.resolved_by} on ${resolved_on}
                         </div>
                     </div>
                 </div>`
