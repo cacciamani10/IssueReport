@@ -14,7 +14,7 @@ fetch('/getIssues')
                     <div class="card-header">
                         ${item.ticket_id}
                     </div>
-                    <div class="card-body" style="padding 40px;">
+                    <div class="card-body" style="margin: 40px;">
                         <h5 class="card-title">${item.ticket_subject}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">${item.created_by}</h6>
                         <p class="card-text">${item.ticket_description}</p>
