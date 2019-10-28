@@ -32,7 +32,7 @@ fetch('/getIssues')
 
 function filterItems() {
     let found;
-    const search = document.getElementById('search-bar');
+    const search = document.getElementById('search-bar').value;
     let tickets = document.getElementById('issues');
     tickets.innerHTML = '';
     for (let item of tickets) {
