@@ -41,7 +41,7 @@ app.get('/getIssues', (req, res) => {
 app.post('/create', (req, res) => {
   console.log(req.body);
   console.log('Processing request from', req.body.createdBy);
-  const string = 'INSERT INTO tickets(ticket_id, created_by, ticket_subject, ticket_description, resolved) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+  const string = 'INSERT INTO tickets(ticket_id, created_by, ticket_subject, ticket_description, resolved, created_on) VALUES($1, $2, $3, $4, $5, NOW()) RETURNING *;';
   const values = [ uuidv4(), testUser, req.body.subject, req.body.description, false];
   client.query(string, values, (err, data) => {
     if (err) {
