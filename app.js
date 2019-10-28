@@ -11,14 +11,14 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-passport.user(new GoogleStrategy(
-  {
-    clientID: '', // googleCLientID
-    clientSecret: '',
-    callbackURL: '/auth/google/callback'
-  }, 
-  (accessToken) => console.log(accessToken)
-));
+// passport.user(new GoogleStrategy(
+//   {
+//     clientID: '', // googleCLientID
+//     clientSecret: '',
+//     callbackURL: '/auth/google/callback'
+//   }, 
+//   (accessToken) => console.log(accessToken)
+// ));
 
 // Init DB
 const client = new Client({
