@@ -37,10 +37,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   const getUser = {
     text: 'SELECT FROM users WHERE user_id = $1',
-    values: [ user.id ]
+    values: [ user ]
   };
   console.log('User passed', user);
-  client.query(`SELECT (user_id, display_name) FROM users WHERE user_id = '${user.id}';`, (err, data) => {
+  client.query(`SELECT (user_id, display_name) FROM users WHERE user_id = '${user}';`, (err, data) => {
     if (err) {
       return done(err); // Exit error
     }
