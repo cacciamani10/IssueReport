@@ -39,6 +39,7 @@ passport.deserializeUser((user, done) => {
     text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1',
     values: [ parseInt(user.id) ]
   };
+  console.log('User passed', user);
   client.query(getUser, (err, data) => {
     if (err) return done(err); // Exit error
     console.log('User being added to done', data);
