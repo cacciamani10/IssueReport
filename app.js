@@ -30,8 +30,11 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  console.log('req.session', req.session);
-  next();
+  if (!req.session)
+    res.redirect('/auth/google');
+  else {
+    next();
+  }
 });
 
 passport.serializeUser((user, done) => {
@@ -124,7 +127,7 @@ app.get('/user', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  req.session.destroy(function (err) {
+  req.session.destroy((err) => {
     res.redirect('/'); 
   });
 });
