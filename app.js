@@ -142,7 +142,6 @@ app.get('/getIssues', (req, res) => {
         jsonRows.push(row);
       }
       jsonRows = JSON.stringify(jsonRows);
-      console.log('Sending', jsonRows);
       res.send(jsonRows);
     }
   });
