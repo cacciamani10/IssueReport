@@ -18,7 +18,7 @@ passport.use(new GoogleStrategy(
     callbackURL: '/auth/google/callback'
   }, 
   (accessToken, refreshToken, profile, done) => {
-    const string = 'SELECT * FROM users WHERE user_id = $1::text RETURNING *;';
+    const string = 'SELECT * FROM users WHERE user_id = $1::text;';
     const values = [ profile.id ];
     console.log('profile.id', profile.id);
     client.query(string, values, (err, data) => {
