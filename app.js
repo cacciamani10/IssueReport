@@ -11,14 +11,25 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// passport.user(new GoogleStrategy(
-//   {
-//     clientID: '', // googleCLientID
-//     clientSecret: '',
-//     callbackURL: '/auth/google/callback'
-//   }, 
-//   (accessToken) => console.log(accessToken)
-// ));
+passport.user(new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID, // googleCLientID
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/auth/google/callback'
+  }, 
+  (accessToken, refreshToken, profile, done) => {
+    const string = 'SELECT * FROM users WHERE user_id = $1 RETURNING *;';
+    const values = [ profile.id ];
+    client.query(string, values, (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(data);
+      }
+    });
+  }
+));
 
 // Init DB
 const client = new Client({
@@ -36,6 +47,15 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.send(path.join(__dirname, 'public', index));
 });
+
+app.get(
+  '/auth/google', 
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+
+app.get('/auth/google/callback', passport.authenticate('google'));
 
 app.get('/getIssues', (req, res) => {
   const string = 'SELECT * FROM tickets;';
