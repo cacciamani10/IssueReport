@@ -11,7 +11,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-passport.user(new GoogleStrategy(
+passport.use(new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID, // googleCLientID
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
