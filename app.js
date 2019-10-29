@@ -132,9 +132,9 @@ app.get('/getIssues', (req, res) => {
       let jsonRows = [];
       for (let row of data.rows) {
         jsonRows.push(row);
-        console.log('Row', row);
       }
       jsonRows = JSON.stringify(jsonRows);
+      console.log('Sending', jsonRows);
       res.send(jsonRows);
     }
   });
