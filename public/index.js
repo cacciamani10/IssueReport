@@ -5,7 +5,9 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
+        console.log('Response object', res);
         res.json().then(data => {
+            console.log('Response after JSON', data);
             if (data.length === 0) {
                 window.location.href = '/create'; 
             }
@@ -44,13 +46,13 @@ function issueToString(item) {
     res += 
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
-            Ticket: #${item.ticket_id}
+            Ticket: #${item[0]}
         </div>
         <div class="card-body">
-            <h5 class="card-title">${item.ticket_subject}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
-            <p class="card-text">${item.ticket_description}</p>`;
-    if (!item.resolved) {
+            <h5 class="card-title">${item[3]}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item[2]}</h6>
+            <p class="card-text">${item[4]}</p>`;
+    if (item[4] === 'f') {
         res +=
             `<span class="badge badge-warning">Unresolved</span>
             <a href="#" class="card-link">Resolve</a>
@@ -61,7 +63,7 @@ function issueToString(item) {
         res +=
             `<span class="badge badge-success">Resolved</span>
             <div class="card-footer text-muted">
-                Resolved by: ${item.resolved_by} on ${item.resolved_on}
+                Resolved by: ${item[6]} on ${item[5]}
             </div>
         </div>
     </div>`
