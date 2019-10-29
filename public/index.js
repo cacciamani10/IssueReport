@@ -6,6 +6,7 @@ fetch('/getIssues')
             return;
         }
         res.json().then(data => {
+            console.log(data);
             if (data === null) {
                 window.location.href = '/create'; 
             }
