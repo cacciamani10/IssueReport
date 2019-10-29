@@ -53,20 +53,24 @@ passport.use(new GoogleStrategy(
     };
     console.log('profile.id', profile.id);
     client.query(lookup, (err, data) => {
-      if (err) console.log(err.stack);
+      if (err) console.log(err.stack); //**** */
       else {
+        console.log('Lookup found', data);
         const now = new Date();
         if (data.rowCount !== 0) { // User was found
+          console.log('user was found'); //**** */
           const updateLastLogin = {
             text: 'UPDATE users SET last_login = $1 WHERE user_id = $2',
             values: [ now, profile.id ]
           };
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
             if (err2) console.log(err2.stack);
+            console.log('exiting success line 68'); //**** */
             return done(null, data.rows[0]); // Exit
           });
         }
-        // User wasn't found
+        // User wasn't found 
+        console.log('user wasn\'t found'); //**** */
         const createUser = {
           text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
           values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
@@ -75,6 +79,7 @@ passport.use(new GoogleStrategy(
           if (err3) {
             done(err3.stack);
           }
+          console.log('exiting success'); //**** */
           done(null, data3.rows[0]);
         });
       }
