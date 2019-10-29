@@ -113,7 +113,6 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  console.log(req.session);
   res.send(req.session.passport.user);
 });
 
@@ -148,7 +147,7 @@ app.post('/create', (req, res) => {
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
-    values: [ req.user, req.body.subject, req.body.description, now]
+    values: [ req.session.passport.user, req.body.subject, req.body.description, now]
   };
   client.query(createTicket, (err, data) => {
     if (err) {
