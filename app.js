@@ -39,12 +39,10 @@ passport.deserializeUser((user, done) => {
     text: 'SELECT FROM users WHERE user_id = $1',
     values: [ user ]
   };
-  console.log('User passed', user);
-  client.query(`SELECT (user_id, display_name) FROM users WHERE user_id = '${user}';`, (err, data) => {
+  client.query(getUser, (err, data) => {
     if (err) {
       return done(err); // Exit error
     }
-    console.log('User being added to done', data);
     done(null, data.rows[0]); // Exit
   });
 });
@@ -60,7 +58,7 @@ passport.use(new GoogleStrategy(
       text: 'SELECT * FROM users WHERE user_id = $1',
       values: [ profile.id ]
     };
-    console.log('profile.id', profile.id);
+    console.log('IN passport callback: profile.id=', profile.id);
     client.query(lookup, (err, data) => {
       if (err) console.log(err.stack); 
       else {
