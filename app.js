@@ -122,8 +122,10 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/getIssues', (req, res) => {
-  const string = 'SELECT * FROM tickets;';
-  client.query(string, (err, data) => {
+  const listIssues = {
+    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.created_on, tickets.resolved_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
+  };
+  client.query(listIssues, (err, data) => {
     if (err)
       res.writeHead(500);
     else {
@@ -134,7 +136,7 @@ app.get('/getIssues', (req, res) => {
       jsonRows = JSON.stringify(jsonRows);
       res.send(jsonRows);
     }
-  })
+  });
 });
 
 app.get('/create', (req, res) => {
