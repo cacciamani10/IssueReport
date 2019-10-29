@@ -41,6 +41,7 @@ passport.deserializeUser((user, done) => {
   };
   client.query(getUser, (err, data) => {
     if (err) return done(err); // Exit error
+    console.log('User being added to done', data.rows[0]);
     done(null, data.rows[0]); // Exit
   });
 });
@@ -104,12 +105,9 @@ app.get(
   '/auth/google/callback', 
   passport.authenticate('google', 
   { 
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
-  },
-  (req, res) => {
-    // Add user here
-    res.redirect('/');
   }
 ));
 
