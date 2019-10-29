@@ -92,6 +92,9 @@ passport.use(new GoogleStrategy(
 
 // Routes
 app.get('/', (req, res) => {
+  if (req.session.passport.user == null) {
+    res.redirect('/auth/google');
+  }
   res.send(path.join(__dirname, 'public', index));
 });
 
