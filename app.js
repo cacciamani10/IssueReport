@@ -36,7 +36,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   const getUser = {
-    text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1',
+    text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1::text;',
     values: [ user.id ]
   };
   console.log('User passed', user);
