@@ -18,15 +18,36 @@ passport.use(new GoogleStrategy(
     callbackURL: '/auth/google/callback'
   }, 
   (accessToken, refreshToken, profile, done) => {
-    const string = 'SELECT * FROM users WHERE user_id = $1;';
-    const values = [ profile.id ];
+    const lookup = {
+      text: 'SELECT * FROM users WHERE user_id = $1',
+      values: [ profile.id ]
+    };
     console.log('profile.id', profile.id);
-    client.query(string, values, (err, data) => {
-      if (err) {
-        console.log(err.stack);
-      }
+    client.query(lookup, (err, data) => {
+      if (err) console.log(err.stack);
       else {
-        console.log(data);
+        const now = new Date();
+        if (data.rowCount !== 0) { // User was found
+          const updateLastLogin = {
+            text: 'UPDATE users SET last_login = $1 WHERE user_id = $2',
+            values: [ now, profile.id ]
+          };
+          client.query(updateLastLogin, (err2, data2) => { // Touch login time
+            if (err2) console.log(err2.stack);
+            done(null, data.rows[0]); // Exit
+          });
+        }
+        // User wasn't found
+        const createUser = {
+          text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5)',
+          values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
+        };
+        client.query(createUser, (err3, data3) => {
+          if (err3) {
+            done(err3.stack);
+          }
+          done(null, data3);
+        });
       }
     });
   }
@@ -79,9 +100,12 @@ app.get('/create', (req, res) => {
 });
 
 app.post('/create', (req, res) => {
-  const string = 'INSERT INTO tickets(ticket_id, created_by, ticket_subject, ticket_description, resolved, created_on) VALUES($1, $2, $3, $4, $5, NOW()) RETURNING *;';
-  const values = [ uuidv4(), testUser, req.body.subject, req.body.description, false];
-  client.query(string, values, (err, data) => {
+  const now = new Date();
+  const createTicket = {
+    text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
+    values: [ testUser, req.body.subject, req.body.description, now]
+  };
+  client.query(createTicket, (err, data) => {
     if (err) {
       console.log(err.stack);
     }
