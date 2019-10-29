@@ -5,6 +5,7 @@ const path = require('path');
 const uuidv4 = require('uuid/v4');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const testUser ='6f805bae-6988-486c-a4ac-039f7cc98b5b';
 const app = express();
@@ -22,6 +23,10 @@ client.connect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+app.use(cookieSession({
+  maxAge: 24 * 60 * 20 * 1000, // 1 day
+  keys: [process.env.COOKIE_KEY]
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,7 +47,7 @@ passport.deserializeUser((user, done) => {
 
 passport.use(new GoogleStrategy(
   {
-    clientID: process.env.GOOGLE_CLIENT_ID, // googleCLientID
+    clientID: process.env.GOOGLE_CLIENT_ID, 
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback'
   }, 
@@ -57,20 +62,16 @@ passport.use(new GoogleStrategy(
       else {
         const now = new Date();
         if (data.rowCount !== 0) { // User was found
-          console.log('user was found'); //**** */
           const updateLastLogin = {
             text: 'UPDATE users SET last_login = $1 WHERE user_id = $2',
             values: [ now, profile.id ]
           };
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
             if (err2) console.log(err2.stack);
-            console.log('exiting success line 68'); //**** */
             done(null, data.rows[0]); // Exit
           });
         }
-        else {
-          // User wasn't found 
-          console.log('user wasn\'t found'); //**** */
+        else { // User wasn't found 
           const createUser = {
             text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
@@ -79,8 +80,6 @@ passport.use(new GoogleStrategy(
             if (err3) {
               done(err3.stack);
             }
-            console.log(data3);
-            console.log('exiting success'); //**** */
             done(null, data3.rows[0]);
           });
         }
@@ -110,8 +109,13 @@ app.get(
   },
   (req, res) => {
     // Add user here
+    res.redirect('/');
   }
 ));
+
+app.get('/getUser', (req, res) => {
+  res.send(req.user);
+});
 
 app.get('/getIssues', (req, res) => {
   const string = 'SELECT * FROM tickets;';
