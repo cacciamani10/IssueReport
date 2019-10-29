@@ -19,8 +19,6 @@ const client = new Client({
 client.connect();
 
 // Middleware
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
