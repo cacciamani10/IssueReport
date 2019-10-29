@@ -113,7 +113,7 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  res.send(req.session);
+  res.send(req.user);
 });
 
 app.get('/logout', (req, res) => {
