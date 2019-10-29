@@ -133,6 +133,7 @@ app.get('/getIssues', (req, res) => {
       for (let row of data.rows) {
         jsonRows.push(row);
       }
+      console.log('Row', row);
       jsonRows = JSON.stringify(jsonRows);
       res.send(jsonRows);
     }

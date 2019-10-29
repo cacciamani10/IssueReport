@@ -5,22 +5,17 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
-        res.json().then(data => {
-            console.log(data);
-            if (data === null) {
-                window.location.href = '/create'; 
-            }
-            let tickets = document.getElementById('issues');
-            tickets.innerHTML = '';
-            for (let item of data) {
-                issues.push(item);
-                tickets.innerHTML += issueToString(item);
-            }
-        });
+        if (res.length === 0) {
+            window.location.href = '/create'; 
+        }
+        let tickets = document.getElementById('issues');
+        tickets.innerHTML = '';
+        for (let item of res) {
+            issues.push(item);
+            tickets.innerHTML += issueToString(item);
+        }
     })
-    .catch(err => {
-        console.log(err);
-    });
+    .catch(err => console.log(err));
 
 function filterItems() {
     let found;
