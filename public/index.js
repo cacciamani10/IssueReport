@@ -5,15 +5,14 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
-        console.log('Response object', res);
         res.json().then(data => {
-            console.log('Response after JSON', data);
             if (data.length === 0) {
                 window.location.href = '/create'; 
             }
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
             for (let item of data) {
+                console.log('Rendering card for', item);
                 issues.push(item);
                 tickets.innerHTML += issueToString(data);
             }
