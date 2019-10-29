@@ -11,9 +11,8 @@ fetch('/getIssues')
             }
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
-            let reg = new RegExp('\(|\)|\"', 'g');
             for (let item of data) {
-                item = item.row.replace(reg, '').split(',');
+                item = item.row.replace(/(|)|\"/g, '').split(',');
                 console.log('Rendering card for', item);
                 issues.push(item);
                 tickets.innerHTML += issueToString(data);
