@@ -40,7 +40,7 @@ passport.deserializeUser((user, done) => {
     values: [ user.id ]
   };
   console.log('User passed', user);
-  client.query(`SELECT FROM users WHERE user_id = '${user.id}'`, (err, data) => {
+  client.query(`SELECT (user_id, display_name) FROM users WHERE user_id = '${user.id}'`, (err, data) => {
     if (err) {
       return done(err); // Exit error
     }
