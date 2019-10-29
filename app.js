@@ -127,14 +127,8 @@ app.get('/user', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  if (req.session) {
-    req.session.destroy((err) => {
-      res.redirect('/'); 
-    });
-  }
-  else {
-    res.redirect('/');
-  }
+  req.session = null;
+  res.redirect('/'); 
 });
 
 app.get('/getIssues', (req, res) => {
