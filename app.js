@@ -53,9 +53,8 @@ passport.use(new GoogleStrategy(
     };
     console.log('profile.id', profile.id);
     client.query(lookup, (err, data) => {
-      if (err) console.log(err.stack); //**** */
+      if (err) console.log(err.stack); 
       else {
-        console.log('Lookup found', data);
         const now = new Date();
         if (data.rowCount !== 0) { // User was found
           console.log('user was found'); //**** */
@@ -79,6 +78,7 @@ passport.use(new GoogleStrategy(
           if (err3) {
             done(err3.stack);
           }
+          console.log(data3);
           console.log('exiting success'); //**** */
           done(null, data3.rows[0]);
         });
