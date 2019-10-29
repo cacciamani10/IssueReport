@@ -20,9 +20,10 @@ passport.use(new GoogleStrategy(
   (accessToken, refreshToken, profile, done) => {
     const string = 'SELECT * FROM users WHERE user_id = $1 RETURNING *;';
     const values = [ profile.id ];
+    console.log('profile.id', profile.id);
     client.query(string, values, (err, data) => {
       if (err) {
-        console.log(err);
+        console.log(err.stack);
       }
       else {
         console.log(data);
