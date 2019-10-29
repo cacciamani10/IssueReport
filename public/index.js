@@ -7,7 +7,7 @@ fetch('/getIssues')
         }
         res.json().then(data => {
             if (data === null) {
-                window.location.href += '/create'; 
+                window.location.href = '/create'; 
             }
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
@@ -46,7 +46,7 @@ function issueToString(item) {
     res += 
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
-            Ticket ID: ${item.ticket_id}
+            Ticket: #${item.ticket_id}
         </div>
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>

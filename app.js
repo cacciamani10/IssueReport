@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(cookieSession({
   maxAge: 24 * 60 * 20 * 1000, // 1 day
-  keys: [process.env.COOKIE_KEY]
+  keys: [ process.env.COOKIE_KEY ]
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -112,8 +112,13 @@ app.get(
   }
 ));
 
-app.get('/getUser', (req, res) => {
-  res.send(req.user);
+app.get('/user', (req, res) => {
+  res.send(req.session);
+});
+
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.send('Logged out');
 });
 
 app.get('/getIssues', (req, res) => {
@@ -140,7 +145,7 @@ app.post('/create', (req, res) => {
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
-    values: [ testUser, req.body.subject, req.body.description, now]
+    values: [ req.user, req.body.subject, req.body.description, now]
   };
   client.query(createTicket, (err, data) => {
     if (err) {
