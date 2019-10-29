@@ -5,15 +5,17 @@ fetch('/getIssues')
             console.log(res.status);
             return;
         }
-        if (res.length === 0) {
-            window.location.href = '/create'; 
-        }
-        let tickets = document.getElementById('issues');
-        tickets.innerHTML = '';
-        for (let item of res) {
-            issues.push(item);
-            tickets.innerHTML += issueToString(item);
-        }
+        res.json().then(data => {
+            if (data.length === 0) {
+                window.location.href = '/create'; 
+            }
+            let tickets = document.getElementById('issues');
+            tickets.innerHTML = '';
+            for (let item of data) {
+                issues.push(item);
+                tickets.innerHTML += issueToString(data);
+            }
+        });
     })
     .catch(err => console.log(err));
 
