@@ -65,23 +65,25 @@ passport.use(new GoogleStrategy(
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
             if (err2) console.log(err2.stack);
             console.log('exiting success line 68'); //**** */
-            return done(null, data.rows[0]); // Exit
+            done(null, data.rows[0]); // Exit
           });
         }
-        // User wasn't found 
-        console.log('user wasn\'t found'); //**** */
-        const createUser = {
-          text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-          values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
-        };
-        client.query(createUser, (err3, data3) => {
-          if (err3) {
-            done(err3.stack);
-          }
-          console.log(data3);
-          console.log('exiting success'); //**** */
-          done(null, data3.rows[0]);
-        });
+        else {
+          // User wasn't found 
+          console.log('user wasn\'t found'); //**** */
+          const createUser = {
+            text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
+          };
+          client.query(createUser, (err3, data3) => {
+            if (err3) {
+              done(err3.stack);
+            }
+            console.log(data3);
+            console.log('exiting success'); //**** */
+            done(null, data3.rows[0]);
+          });
+        }
       }
     });
   }
