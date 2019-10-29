@@ -36,12 +36,15 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   const getUser = {
-    text: 'SELECT * FROM users WHERE user_id = $1::text;',
+    text: 'SELECT FROM users WHERE user_id = $1',
     values: [ user.id ]
   };
   console.log('User passed', user);
   client.query(getUser, (err, data) => {
-    if (err) return done(err); // Exit error
+    if (err) {
+      console.log(err);
+      return done(err); // Exit error
+    }
     console.log('User being added to done', data);
     done(null, data.rows[0]); // Exit
   });
