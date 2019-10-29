@@ -68,7 +68,7 @@ passport.use(new GoogleStrategy(
         }
         // User wasn't found
         const createUser = {
-          text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5)',
+          text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
           values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
         };
         client.query(createUser, (err3, data3) => {
