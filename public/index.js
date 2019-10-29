@@ -15,7 +15,7 @@ fetch('/getIssues')
                 item = item.row.replace(/"|\)/g, '').split(',');
                 console.log('Rendering card for', item);
                 issues.push(item);
-                tickets.innerHTML += issueToString(data);
+                tickets.innerHTML += issueToString(item);
             }
         });
     })
