@@ -6,6 +6,9 @@ fetch('/getIssues')
             return;
         }
         res.json().then(data => {
+            if (data === null) {
+                window.location.href += '/create'; 
+            }
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
             for (let item of data) {
