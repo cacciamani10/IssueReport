@@ -29,6 +29,10 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next) => {
+  console.log('req.session', req.session);
+  next();
+});
 
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
@@ -120,8 +124,9 @@ app.get('/user', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  req.logout();
-  res.send('Logged out');
+  req.session.destroy(function (err) {
+    res.redirect('/'); 
+  });
 });
 
 app.get('/getIssues', (req, res) => {

@@ -43,14 +43,6 @@ function filterItems() {
 
 function issueToString(item) {
     let res = '';
-    /*
-0: "(4"
-1: "Jacob Cacciamani"
-2: "This is a hopeful ticket"
-3: "Test 12 3"
-4: "f"
-5: "2019-10-29 08:27:42.02"
-6: "" */
     res += 
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
