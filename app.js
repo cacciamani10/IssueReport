@@ -22,6 +22,23 @@ client.connect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  done(null, user.user_id);
+});
+
+passport.deserializeUser((user, done) => {
+  const getUser = {
+    text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1',
+    values: [ parseInt(user.rows[0]) ]
+  };
+  client.query(getUser, (err, data) => {
+    if (err) return done(err); // Exit error
+    done(null, data.rows[0]); // Exit
+  });
+});
 
 passport.use(new GoogleStrategy(
   {
@@ -46,7 +63,7 @@ passport.use(new GoogleStrategy(
           };
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
             if (err2) console.log(err2.stack);
-            done(null, data.rows[0]); // Exit
+            return done(null, data.rows[0]); // Exit
           });
         }
         // User wasn't found
@@ -58,14 +75,12 @@ passport.use(new GoogleStrategy(
           if (err3) {
             done(err3.stack);
           }
-          done(null, data3);
+          done(null, data3.rows[0]);
         });
       }
     });
   }
 ));
-
-
 
 // Routes
 app.get('/', (req, res) => {
@@ -79,7 +94,17 @@ app.get(
   })
 );
 
-app.get('/auth/google/callback', passport.authenticate('google'));
+app.get(
+  '/auth/google/callback', 
+  passport.authenticate('google', 
+  { 
+    failureRedirect: '/login',
+    failureFlash: true
+  },
+  (req, res) => {
+    // Add user here
+  }
+));
 
 app.get('/getIssues', (req, res) => {
   const string = 'SELECT * FROM tickets;';
