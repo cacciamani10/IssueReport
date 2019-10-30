@@ -121,7 +121,8 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  console.log(req.session);
+  console.log('req.user',req.user);
+  console.log('req.session',req.session);
   res.send(req.session.passport.user);
 });
 
