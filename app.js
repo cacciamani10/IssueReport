@@ -43,7 +43,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   const getUser = {
-    text: 'SELECT FROM users WHERE user_id = $1',
+    text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1',
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
@@ -123,6 +123,7 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
+  
   res.send(req.session.passport.user);
 });
 
