@@ -123,7 +123,7 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  
+  console.log(req.session);
   res.send(req.session.passport.user);
 });
 
