@@ -124,7 +124,7 @@ app.get(
 
 app.get('/user', (req, res) => {
   console.log(req.session);
-  res.send(req.session.user.row);
+  res.send(req.session.user);
 });
 
 app.get('/logout', (req, res) => {
