@@ -121,8 +121,8 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  console.log(req.session.user);
-  res.send(req.session.user);
+  console.log(req.session);
+  res.send(req.session.passport.user);
 });
 
 app.get('/logout', (req, res) => {
