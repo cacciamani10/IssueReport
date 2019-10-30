@@ -123,7 +123,7 @@ app.get(
 app.get('/user', (req, res) => {
   console.log('req.session',req.session);
   console.log('req.user',req.user);
-  res.send(req.user);
+  res.send(req.user.row);
 });
 
 app.get('/logout', (req, res) => {
