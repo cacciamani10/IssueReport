@@ -28,7 +28,7 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  console.log('hit redirect middleware');
+  console.log('hit redirect middleware', req.session);
   if (req.session != null)
     res.redirect('/auth/google');
   else {
