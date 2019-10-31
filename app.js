@@ -29,7 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
   console.log('hit redirect middleware', req.user);
-  if (req.user != null)
+  if (req.user == null)
     res.redirect('/auth/google');
   else {
     next();
@@ -98,9 +98,6 @@ passport.use(new GoogleStrategy(
 
 // Routes
 app.get('/', (req, res) => {
-  if (req.session.passport.user == null) {
-    res.redirect('/auth/google');
-  }
   res.send(path.join(__dirname, 'public', index));
 });
 
