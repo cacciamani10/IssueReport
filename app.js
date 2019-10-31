@@ -28,8 +28,8 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  console.log('hit redirect middleware', req.session);
-  if (req.session != null)
+  console.log('hit redirect middleware', req.user);
+  if (req.user != null)
     res.redirect('/auth/google');
   else {
     next();
@@ -122,13 +122,12 @@ app.get(
 ));
 
 app.get('/user', (req, res) => {
-  console.log('req.session',req.session);
-  console.log('req.user',req.user);
   res.send(req.user.row);
 });
 
 app.get('/logout', (req, res) => {
   req.session = null;
+  req.user = null;
   res.redirect('/'); 
 });
 
