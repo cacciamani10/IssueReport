@@ -28,7 +28,9 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 const redirectIfLoggedOut = (req, res, next) => {
-  if (!req.user) {
+  console.log('checking if logged in...');
+  if (req.user == null) {
+    console.log('no user');
     res.redirect('/auth/google');
   } else {
     next();
