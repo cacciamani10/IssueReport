@@ -28,7 +28,7 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  if (req.session === null)
+  if (req.session === 'undefined')
     res.redirect('/auth/google');
   else {
     next();
@@ -157,7 +157,7 @@ app.post('/create', (req, res) => {
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
-    values: [ req.session.passport.user, req.body.subject, req.body.description, now]
+    values: [ req.user, req.body.subject, req.body.description, now]
   };
   client.query(createTicket, (err, data) => {
     if (err) {
