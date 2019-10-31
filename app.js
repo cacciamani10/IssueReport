@@ -31,9 +31,7 @@ app.use((req, res, next) => {
   console.log('hit redirect middleware', req.user);
   if (req.user == null)
     res.redirect('/auth/google');
-  else {
-    next();
-  }
+  next();
 });
 
 passport.serializeUser((user, done) => {
