@@ -117,7 +117,7 @@ app.get(
   }
 ));
 
-app.get('/user', redirectIfLoggedOut, (req, res) => {
+app.get('/user', (req, res) => {
   res.send(req.user.row);
 });
 
@@ -127,7 +127,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); 
 });
 
-app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
+app.get('/getIssues', (req, res) => {
   const listIssues = {
     text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.created_on, tickets.resolved_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
   };
