@@ -28,11 +28,11 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 const redirectIfLoggedOut = (req, res, next) => {
-  if (req.user == null) {
+  if (!req.user) {
     res.redirect('/auth/google');
-    return;
+  } else {
+    next();
   }
-  next();
 };
 
 passport.serializeUser((user, done) => {
@@ -112,7 +112,7 @@ app.get(
   passport.authenticate('google', 
   { 
     successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/auth/google',
     failureFlash: true
   }
 ));
