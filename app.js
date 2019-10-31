@@ -28,9 +28,10 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 const redirectIfLoggedOut = (req, res, next) => {
-  console.log('hit redirect middleware', req.user);
-  if (req.user == null)
+  if (req.user == null) {
     res.redirect('/auth/google');
+    return;
+  }
   next();
 };
 
