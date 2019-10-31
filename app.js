@@ -27,12 +27,12 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res, next) => {
+const redirectIfLoggedOut = (req, res, next) => {
   console.log('hit redirect middleware', req.user);
   if (req.user == null)
     res.redirect('/auth/google');
   next();
-});
+};
 
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
@@ -95,7 +95,7 @@ passport.use(new GoogleStrategy(
 ));
 
 // Routes
-app.get('/', (req, res) => {
+app.get('/', redirectIfLoggedOut, (req, res) => {
   res.send(path.join(__dirname, 'public', index));
 });
 
@@ -116,7 +116,7 @@ app.get(
   }
 ));
 
-app.get('/user', (req, res) => {
+app.get('/user', redirectIfLoggedOut, (req, res) => {
   res.send(req.user.row);
 });
 
@@ -126,7 +126,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); 
 });
 
-app.get('/getIssues', (req, res) => {
+app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.created_on, tickets.resolved_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
   };
@@ -144,11 +144,11 @@ app.get('/getIssues', (req, res) => {
   });
 });
 
-app.get('/create', (req, res) => {
+app.get('/create', redirectIfLoggedOut, (req, res) => {
   res.send(path.join(__dirname, 'public', create));
 });
 
-app.post('/create', (req, res) => {
+app.post('/create', redirectIfLoggedOut, (req, res) => {
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
