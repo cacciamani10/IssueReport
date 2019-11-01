@@ -130,7 +130,7 @@ passport.use(new GoogleStrategy(
 // Static Routes
 app.get('/', redirectIfLoggedOut, (req, res) => {
   console.log('hit / route');
-  res.send(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/login', (req, res) => {
