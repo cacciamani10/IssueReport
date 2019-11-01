@@ -23,7 +23,7 @@ client.connect();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static('public', { extensions: ['html']} ));
+//app.use(express.static('public', { extensions: ['html']} ));
 const redirectIfLoggedOut = (req, res, next) => {
   console.log('checking if logged in...');
   if (req.user == null) {
@@ -130,7 +130,7 @@ passport.use(new GoogleStrategy(
 // Routes
 app.get('/', redirectIfLoggedOut, (req, res) => {
   console.log('hit / route');
-  res.send(path.join(__dirname, 'public', index));
+  res.sendFile(path.join(__dirname, 'public', index));
 });
 
 app.get(
