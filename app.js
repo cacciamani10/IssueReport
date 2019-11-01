@@ -149,7 +149,7 @@ app.get(
 ));
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.send('login');
 });
 
 app.get('/register', (req, res) => {
