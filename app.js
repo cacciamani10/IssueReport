@@ -31,7 +31,15 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+const redirectIfLoggedOut = (req, res, next) => {
+  console.log('checking if logged in...');
+  if (req.user == null) {
+    console.log('no user');
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
 
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
