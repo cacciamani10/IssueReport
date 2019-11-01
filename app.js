@@ -127,12 +127,26 @@ passport.use(new GoogleStrategy(
   }
 ));
 
-// Routes
+// Static Routes
 app.get('/', redirectIfLoggedOut, (req, res) => {
   console.log('hit / route');
   res.sendFile(path.join(__dirname, 'public', index));
 });
 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', login));
+});
+
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', register));
+})
+
+app.get('/create', redirectIfLoggedOut, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', create));
+});
+
+
+// Google Auth
 app.get(
   '/auth/google', 
   passport.authenticate('google', {
@@ -176,10 +190,6 @@ app.get('/getIssues', (req, res) => {
       res.send(jsonRows);
     }
   });
-});
-
-app.get('/create', redirectIfLoggedOut, (req, res) => {
-  res.send(path.join(__dirname, 'public', create));
 });
 
 app.post('/register', (req, res) => {
