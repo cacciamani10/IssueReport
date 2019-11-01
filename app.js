@@ -32,7 +32,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const redirectIfLoggedOut = (req, res, next) => {
-  console.log('checking if logged in...');
   if (req.user == null) {
     console.log('no user');
     res.redirect('/login');
@@ -129,7 +128,6 @@ passport.use(new GoogleStrategy(
 
 // Static Routes
 app.get('/', redirectIfLoggedOut, (req, res) => {
-  console.log('hit / route');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -202,6 +200,7 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
+  console.log(req.user);
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
