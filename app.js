@@ -34,7 +34,7 @@ const redirectIfLoggedOut = (req, res, next) => {
   console.log('checking if logged in...');
   if (req.user == null) {
     console.log('no user');
-    res.redirect('/auth/google');
+    res.redirect('/login');
   } else {
     next();
   }
@@ -148,8 +148,12 @@ app.get(
   }
 ));
 
+app.get('/login', (req, res) => {
+  res.send(path.join(__dirname, 'public', login));
+});
+
 app.get('/register', (req, res) => {
-  
+  res.send(path.join(__dirname, 'public', register));
 });
 
 app.get('/user', (req, res) => {
@@ -182,6 +186,10 @@ app.get('/getIssues', (req, res) => {
 
 app.get('/create', redirectIfLoggedOut, (req, res) => {
   res.send(path.join(__dirname, 'public', create));
+});
+
+app.post('/register', (req, res) => {
+ ///TODO
 });
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
