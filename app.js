@@ -23,7 +23,6 @@ client.connect();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const staticServer = express.static('public', { extensions: ['html']} )
 const redirectIfLoggedOut = (req, res, next) => {
   console.log('checking if logged in...');
   if (req.user == null) {
@@ -39,6 +38,7 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static('public', { extensions: ['html']} ));
 
 
 passport.serializeUser((user, done) => {
@@ -128,21 +128,21 @@ passport.use(new GoogleStrategy(
 ));
 
 // Static Routes
-app.get('/', redirectIfLoggedOut, staticServer, (req, res) => {
+app.get('/', redirectIfLoggedOut, (req, res) => {
   console.log('hit / route');
   //res.sendFile();
   res.send(path.join(__dirname, 'public', index));
 });
 
-app.get('/login', staticServer, (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-app.get('/register', staticServer, (req, res) => {
+app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'register.html'));
 })
 
-app.get('/create', redirectIfLoggedOut, staticServer, (req, res) => {
+app.get('/create', redirectIfLoggedOut, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'create.html'));
 });
 
