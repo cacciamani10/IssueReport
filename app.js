@@ -57,7 +57,7 @@ passport.deserializeUser((user, done) => {
   });
 });
 
-passport.user(new LocalStrategy (
+passport.use(new LocalStrategy (
 (username, password, done) => {
   const lookup = {
     text: 'SELECT * FROM users WHERE display_name = $1',
