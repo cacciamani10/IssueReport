@@ -164,8 +164,13 @@ app.get(
   }
 ));
 
-app.get('/user', (req, res) => {
-  res.send(req.user.row);
+app.get('/user', redirectIfLoggedOut, (req, res) => {
+  const parseUser = req.user.row.replace(/"|\)|\(/g, '').split(',');
+  const User = {
+    id: parseUser[0],
+    display_name: parseUser[1]
+  };
+  res.json(User);
 });
 
 app.get('/logout', (req, res) => {
@@ -174,7 +179,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); 
 });
 
-app.get('/getIssues', (req, res) => {
+app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.created_on, tickets.resolved_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
   };
