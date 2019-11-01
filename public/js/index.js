@@ -30,6 +30,7 @@ fetch('/user')
         res.json().then(data => {
             console.log(data);
             let userOptions = document.getElementById('navbarDropdown');
+            userOptions.innerHTML = data.display_name;
         })
     }).catch(err => console.log(err));
 
