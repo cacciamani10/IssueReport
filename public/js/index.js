@@ -21,6 +21,18 @@ fetch('/getIssues')
     })
     .catch(err => console.log(err));
 
+fetch('/user')
+    .then(res => {
+        if (res.status != 200) {
+            console.log(res.status);
+            return;
+        }
+        res.json().then(data => {
+            console.log(data);
+            let userOptions = document.getElementById('navbarDropdown');
+        })
+    })
+
 function filterItems() {
     let found;
     const regex = new RegExp(document.getElementById('search-bar').value, 'i');
