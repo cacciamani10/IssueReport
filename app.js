@@ -23,22 +23,14 @@ client.connect();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const redirectIfLoggedOut = (req, res, next) => {
-  console.log('checking if logged in...');
-  if (req.user == null) {
-    console.log('no user');
-    res.redirect('/login');
-  } else {
-    next();
-  }
-};
+
 app.use(cookieSession({
   maxAge: 24 * 60 * 20 * 1000, // 1 day
   keys: [ process.env.COOKIE_KEY ]
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static('public', { extensions: ['html']} ));
+
 
 
 passport.serializeUser((user, done) => {
@@ -130,7 +122,6 @@ passport.use(new GoogleStrategy(
 // Static Routes
 app.get('/', redirectIfLoggedOut, (req, res) => {
   console.log('hit / route');
-  //res.sendFile();
   res.send(path.join(__dirname, 'public', index));
 });
 
@@ -210,5 +201,7 @@ app.post('/create', redirectIfLoggedOut, (req, res) => {
   })
   res.redirect('/');
 });
+
+app.use(express.static('public', { extensions: ['html']} ));
 
 app.listen(PORT);
