@@ -53,6 +53,7 @@ passport.deserializeUser((user, done) => {
     if (err) {
       return done(err); // Exit error
     }
+    console.log('data.row[0]', data.row[0]);
     done(null, data.rows[0]); // Exit
   });
 });
