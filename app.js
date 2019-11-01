@@ -134,15 +134,15 @@ app.get('/', redirectIfLoggedOut, (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', login));
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', register));
+  res.sendFile(path.join(__dirname, 'public', 'register.html'));
 })
 
 app.get('/create', redirectIfLoggedOut, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', create));
+  res.sendFile(path.join(__dirname, 'public', 'create.html'));
 });
 
 
