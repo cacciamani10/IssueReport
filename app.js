@@ -4,6 +4,9 @@ const { Client } = require('pg');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+const uuidv4 = require('uuid/v4');
+const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const app = express();
@@ -54,6 +57,33 @@ passport.deserializeUser((user, done) => {
   });
 });
 
+passport.user(new LocalStrategy (
+(username, password, done) => {
+  const lookup = {
+    text: 'SELECT * FROM users WHERE display_name = $1',
+    values: [ username ]
+  };
+  client.query(lookup, (err, data) => {
+    if (err) console.log(err.stack); 
+    else {
+      const now = new Date();
+      if (data.rowCount !== 0) { // User was found
+        const updateLastLogin = {
+          text: 'UPDATE users SET last_login = $1 WHERE display_name = $2',
+          values: [ now, username ]
+        };
+        client.query(updateLastLogin, (err2, data2) => { // Touch login time
+          if (err2) console.log(err2.stack);
+          done(null, data.rows[0]); // Exit
+        });
+      }
+      else {  // user wasn't found
+        
+      }
+    }
+  });
+}));
+
 passport.use(new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID, 
@@ -65,7 +95,6 @@ passport.use(new GoogleStrategy(
       text: 'SELECT * FROM users WHERE user_id = $1',
       values: [ profile.id ]
     };
-    console.log('IN passport callback: profile.id=', profile.id);
     client.query(lookup, (err, data) => {
       if (err) console.log(err.stack); 
       else {
@@ -118,6 +147,10 @@ app.get(
     failureFlash: true
   }
 ));
+
+app.get('/register', (req, res) => {
+  
+});
 
 app.get('/user', (req, res) => {
   res.send(req.user.row);
