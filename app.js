@@ -149,7 +149,7 @@ app.get(
 ));
 
 app.get('/login', (req, res) => {
-  res.send(path.join(__dirname, 'public', login));
+  res.render('login');
 });
 
 app.get('/register', (req, res) => {
