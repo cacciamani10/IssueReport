@@ -31,7 +31,7 @@ fetch('/user')
             console.log(data);
             let userOptions = document.getElementById('navbarDropdown');
         })
-    })
+    }).catch(err => console.log(err));
 
 function filterItems() {
     let found;
