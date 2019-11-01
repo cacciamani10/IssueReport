@@ -24,12 +24,6 @@ client.connect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public', { extensions: ['html']} ));
-app.use(cookieSession({
-  maxAge: 24 * 60 * 20 * 1000, // 1 day
-  keys: [ process.env.COOKIE_KEY ]
-}));
-app.use(passport.initialize());
-app.use(passport.session());
 const redirectIfLoggedOut = (req, res, next) => {
   console.log('checking if logged in...');
   if (req.user == null) {
@@ -39,6 +33,13 @@ const redirectIfLoggedOut = (req, res, next) => {
     next();
   }
 };
+app.use(cookieSession({
+  maxAge: 24 * 60 * 20 * 1000, // 1 day
+  keys: [ process.env.COOKIE_KEY ]
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
@@ -147,14 +148,6 @@ app.get(
     failureFlash: true
   }
 ));
-
-app.get('/login', (req, res) => {
-  res.send('login');
-});
-
-app.get('/register', (req, res) => {
-  res.send(path.join(__dirname, 'public', register));
-});
 
 app.get('/user', (req, res) => {
   res.send(req.user.row);
