@@ -23,7 +23,7 @@ client.connect();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static('public'));
+app.use(express.static('public', { extensions: ['html']} ));
 app.use(cookieSession({
   maxAge: 24 * 60 * 20 * 1000, // 1 day
   keys: [ process.env.COOKIE_KEY ]
