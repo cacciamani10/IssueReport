@@ -75,13 +75,14 @@ passport.use(new LocalStrategy (
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
-    if (err) console.log(err.stack); 
+    if (err) return done(err.stack); 
     else {
       const now = new Date();
       if (data.rowCount !== 0) { // User was found
         const dataParse = queryToArray(data.rows[0].row);
         console.log('Query returned a user', dataParse);
         bcrypt.compare(password, dataParse[0], (bcrErr, result) => {
+          if (bcrErr) return done(err);
           if (result) {
             return done(null, dataParse.shift());
           }
