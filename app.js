@@ -7,6 +7,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const app = express();
@@ -40,6 +41,10 @@ const redirectIfLoggedOut = (req, res, next) => {
   }
 };
 
+const queryToArray = (queryRow) => {
+  return queryRow.replace(/"|\)|\(/g, '').split(',');
+}
+
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
 });
@@ -51,7 +56,7 @@ passport.deserializeUser((user, done) => {
   };
   client.query(getUser, (err, data) => {
     if (data.rowCount !== 0) {
-      const dataParse = data.rows[0].row.replace(/"|\)|\(/g, '').split(',');
+      const dataParse = queryToArray(data.rows[0].row);
       const User = {
         user_id: dataParse[0],
         display_name: dataParse[1]
@@ -65,7 +70,7 @@ passport.deserializeUser((user, done) => {
 passport.use(new LocalStrategy (
 (username, password, done) => {
   const lookup = {
-    text: 'SELECT * FROM users WHERE display_name = $1',
+    text: 'SELECT (password,  FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
@@ -73,17 +78,18 @@ passport.use(new LocalStrategy (
     else {
       const now = new Date();
       if (data.rowCount !== 0) { // User was found
-        const updateLastLogin = {
-          text: 'UPDATE users SET last_login = $1 WHERE display_name = $2',
-          values: [ now, username ]
-        };
-        client.query(updateLastLogin, (err2, data2) => { // Touch login time
-          if (err2) console.log(err2.stack);
-          done(null, data.rows[0]); // Exit
+        const dataParse = queryToArray(data.rows[0].row);
+        bcrypt.compare(password, user[0], (bcrErr, result) => {
+          if (result) {
+            return done(null, user.shift());
+          }
+          else {
+            return done(null, false);
+          }
         });
       }
       else {  // user wasn't found
-        
+        return done(null, false);
       }
     }
   });
@@ -162,7 +168,7 @@ app.get(
   passport.authenticate('google', 
   { 
     successRedirect: '/',
-    failureRedirect: '/auth/google',
+    failureRedirect: '/login',
     failureFlash: true
   }
 ));
@@ -187,7 +193,7 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
     else {
       let jsonRows = [];
       for (let row of data.rows) {
-        row = row.row.replace(/"|\)|\(/g, '').split(',');
+        row = queryToArray(row.row);
         const Issue = {
           ticket_id: row[0],
           created_by: row[1],
@@ -206,7 +212,27 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 });
 
 app.post('/register', (req, res) => {
- ///TODO
+  const now = new Date();
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    const createUser = {
+      text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
+      values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
+    };
+    client.query(createUser, (queryErr, data) => {
+      if (err) {
+        console.log(err.stack);
+      }
+    });
+  });
+});
+
+app.post('/login', (req, res) => {
+  passport.authenticate('local'),
+  {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: 'Invalid username, email, or password'
+  }
 });
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
@@ -219,7 +245,7 @@ app.post('/create', redirectIfLoggedOut, (req, res) => {
     if (err) {
       console.log(err.stack);
     }
-  })
+  });
   res.redirect('/');
 });
 
