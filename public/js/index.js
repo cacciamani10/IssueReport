@@ -21,7 +21,12 @@ fetch('/user')
         res.json().then(data => {
             let tickets = document.getElementById('issues');
             if (data.length === 0) {
-                tickets.innerHTML = 'No tickets. Would you like to <a href="/create">create</a> one?';
+                tickets.innerHTML = `
+                <div class="jumbotron">
+                    <h1 class="display-4">No Tickets</h1>
+                    <hr class="my-4">
+                    <p>Click <a class="btn btn-primary btn-lg" href="/create" role="button">here to create one.</a></p>
+              </div>`
             }
             else {
                 
