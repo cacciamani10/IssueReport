@@ -233,12 +233,13 @@ app.post('/register', (req, res) => {
 
 app.post(
   '/login',  
-  passport.authenticate('local'),
+  passport.authenticate('local',
   {
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: 'Invalid username, email, or password'
-  });
+  }),
+  );
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
   const now = new Date();
