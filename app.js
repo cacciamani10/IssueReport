@@ -71,7 +71,8 @@ passport.use(new LocalStrategy (
 (username, password, done) => {
   console.log('Attempting to login', username,  'locally');
   const lookup = {
-    text: 'SELECT (password, user_id, display_name)  FROM users WHERE display_name = $1 OR email = $1',
+    text: 'SELECT *  FROM users WHERE display_name = $1 OR email = $1',
+    //SELECT (password, user_id, display_name)  FROM users WHERE display_name = $1 OR email = $1
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
@@ -81,7 +82,7 @@ passport.use(new LocalStrategy (
       if (data.rowCount !== 0) { // User was found
         const dataParse = queryToArray(data.rows[0].row);
         console.log('Query returned a user', dataParse);
-        bcrypt.compare(password, dataParse[0], (bcrErr, result) => {
+        bcrypt.compare(password, dataParse[4], (bcrErr, result) => {
           if (bcrErr) return done(err);
           if (result) {
             return done(null, dataParse.shift());
