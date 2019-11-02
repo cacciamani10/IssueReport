@@ -1,5 +1,5 @@
 const issues = [];
-const dsiplayName;
+let dsiplayName;
 fetch('/user')
     .then(userRes => {
         if (userRes.status != 200) {
