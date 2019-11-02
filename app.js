@@ -50,6 +50,9 @@ passport.deserializeUser((user, done) => {
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
+    console.log(data);
+    console.log('rowcount',data.rowCount);
+    console.log('row[0]', data.row[0]);
     if (data.rowCount !== 0) {
       const dataParse = data.row[0].replace(/"|\)|\(/g, '').split(',');
       const User = {
