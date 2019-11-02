@@ -50,6 +50,7 @@ passport.deserializeUser((user, done) => {
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
+    console.log('deserialize return', data);
     return done(err, data);
   });
 });
