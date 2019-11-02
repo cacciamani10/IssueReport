@@ -1,4 +1,5 @@
 const issues = [];
+const dsiplayName;
 fetch('/user')
     .then(userRes => {
         if (userRes.status != 200) {
@@ -8,7 +9,8 @@ fetch('/user')
         userRes.json()
     .then(userData => {
         let userOptions = document.getElementById('navbarDropdown');
-        userOptions.innerHTML = userData.display_name;
+        dsiplayName = userData.display_name; 
+        userOptions.innerHTML = dsiplayName;
         return fetch('/getIssues');
     })
     .then(res => {
@@ -23,6 +25,9 @@ fetch('/user')
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
             for (let item of data) {
+                if (item.created_by === display_name) {
+                    item.created_by = 'You';
+                }
                 issues.push(item);
                 tickets.innerHTML += issueToString(item);
             }
