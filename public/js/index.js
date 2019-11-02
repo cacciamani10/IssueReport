@@ -25,7 +25,7 @@ fetch('/user')
                 <div class="jumbotron">
                     <h1 class="display-4">No Tickets</h1>
                     <hr class="my-4">
-                    <p>Click <a class="btn btn-primary btn-lg" href="/create" role="button">here to create one.</a></p>
+                    <p>Click <a href="/create" role="button">here to create one.</a></p>
               </div>`
             }
             else {
