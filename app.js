@@ -50,9 +50,6 @@ passport.deserializeUser((user, done) => {
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
-    console.log(data);
-    console.log('rowcount',data.rowCount);
-    console.log('row[0]', data.rows[0]);
     if (data.rowCount !== 0) {
       const dataParse = data.rows[0].row.replace(/"|\)|\(/g, '').split(',');
       const User = {
@@ -172,12 +169,7 @@ app.get(
 ));
 
 app.get('/user', redirectIfLoggedOut, (req, res) => {
-  const parseUser = req.user.row.replace(/"|\)|\(/g, '').split(',');
-  const User = {
-    id: parseUser[0],
-    display_name: parseUser[1]
-  };
-  res.json(User);
+  res.json(req.user);
 });
 
 app.get('/logout', (req, res) => {
