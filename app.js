@@ -83,7 +83,7 @@ passport.use(new LocalStrategy (
         console.log('Query returned a user', dataParse);
         bcrypt.compare(password, dataParse[0], (bcrErr, result) => {
           if (result) {
-            return done(null, user.shift());
+            return done(null, dataParse.shift());
           }
           else {
             return done(null, false);
