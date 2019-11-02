@@ -201,15 +201,9 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
-  const now = new Date();
-  const parseUser = req.user.row.replace(/"|\)|\(/g, '').split(',');
-  const User = {
-    id: parseUser[0],
-    display_name: parseUser[1]
-  };
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
-    values: [ User.id, req.body.subject, req.body.description, now]
+    values: [ req.user.user_id, req.body.subject, req.body.description, now]
   };
   client.query(createTicket, (err, data) => {
     if (err) {
