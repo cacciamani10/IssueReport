@@ -22,12 +22,10 @@ fetch('/user')
             let tickets = document.getElementById('issues');
             if (data.length === 0) {
                 tickets.innerHTML = `
-                <div class="container-full-bg">
-                    <div class="jumbotron">
-                        <h1 class="display-4">No Tickets</h1>
-                        <hr class="my-4">
-                        <p>Click <a href="/create" role="button">here to create one.</a></p>
-                    </div>
+                <div class="jumbotron jumbotron-fluid">
+                    <h1 class="display-4">No Tickets</h1>
+                    <hr class="my-4">
+                    <p>Click <a href="/create" role="button">here to create one.</a></p>
                 </div>`
             }
             else {
