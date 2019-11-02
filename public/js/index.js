@@ -19,17 +19,20 @@ fetch('/user')
             return;
         }
         res.json().then(data => {
-            if (data.length === 0) {
-                window.location.href = '/create'; 
-            }
             let tickets = document.getElementById('issues');
-            tickets.innerHTML = '';
-            for (let item of data) {
-                if (item.created_by === display_name) {
-                    item.created_by = 'You';
+            if (data.length === 0) {
+                tickets.innerHTML = 'No tickets. Would you like to <a href="/create">create</a> one?';
+            }
+            else {
+                
+                tickets.innerHTML = '';
+                for (let item of data) {
+                    if (item.created_by === display_name) {
+                        item.created_by = 'You';
+                    }
+                    issues.push(item);
+                    tickets.innerHTML += issueToString(item);
                 }
-                issues.push(item);
-                tickets.innerHTML += issueToString(item);
             }
         });
     })
