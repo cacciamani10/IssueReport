@@ -79,6 +79,7 @@ passport.use(new LocalStrategy (
     if (err) return done(err.stack); 
     else {
       const now = new Date();
+      console.log(data);
       if (data.rowCount !== 0) { // User was found
         const dataParse = queryToArray(data.rows[0].row);
         console.log('Query returned a user', dataParse);
