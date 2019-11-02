@@ -54,7 +54,7 @@ passport.deserializeUser((user, done) => {
     console.log('rowcount',data.rowCount);
     console.log('row[0]', data.rows[0]);
     if (data.rowCount !== 0) {
-      const dataParse = data.rows[0].replace(/"|\)|\(/g, '').split(',');
+      const dataParse = data.rows[0].row.replace(/"|\)|\(/g, '').split(',');
       const User = {
         user_id: dataParse[0],
         display_name: dataParse[1]
