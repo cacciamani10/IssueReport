@@ -7,7 +7,6 @@ fetch('/user')
         }
         userRes.json()
     .then(userData => {
-        console.log(userData);
         let userOptions = document.getElementById('navbarDropdown');
         userOptions.innerHTML = userData.display_name;
         return fetch('/getIssues');
@@ -24,7 +23,6 @@ fetch('/user')
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
             for (let item of data) {
-                console.log('Rendering card for', item);
                 issues.push(item);
                 tickets.innerHTML += issueToString(item);
             }
@@ -47,7 +45,6 @@ function filterItems() {
         }
         if(found) {
             tickets.innerHTML += issueToString(item);
-            console.log(issueToString(item));
         }
     }
 }

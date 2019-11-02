@@ -56,7 +56,6 @@ passport.deserializeUser((user, done) => {
         user_id: dataParse[0],
         display_name: dataParse[1]
       };
-      console.log(User);
       return done(null, User);
     }
     return done(err, data);
