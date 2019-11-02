@@ -37,6 +37,7 @@ function filterItems() {
     tickets.innerHTML = '';
     for (let item of issues) {
         found = false;
+        item = Object.values(item);
         for (let value of item) {
             if (regex.test(value)) {
                 found = true;
