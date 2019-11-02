@@ -69,6 +69,7 @@ passport.deserializeUser((user, done) => {
 
 passport.use(new LocalStrategy (
 (username, password, done) => {
+  console.log('Attempting to login', username,  'locally');
   const lookup = {
     text: 'SELECT (password,  FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
@@ -79,6 +80,7 @@ passport.use(new LocalStrategy (
       const now = new Date();
       if (data.rowCount !== 0) { // User was found
         const dataParse = queryToArray(data.rows[0].row);
+        console.log('Query returned a user', dataParse);
         bcrypt.compare(password, user[0], (bcrErr, result) => {
           if (result) {
             return done(null, user.shift());
@@ -224,7 +226,7 @@ app.post('/register', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
-      console.log('finished INSERT');
+      res.redirect('/');
     });
   });
 });
