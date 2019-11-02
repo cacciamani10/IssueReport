@@ -201,6 +201,7 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/create', redirectIfLoggedOut, (req, res) => {
+  const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
     values: [ req.user.user_id, req.body.subject, req.body.description, now]
