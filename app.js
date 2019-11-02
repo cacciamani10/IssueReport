@@ -180,15 +180,25 @@ app.get('/logout', (req, res) => {
 
 app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.created_on, tickets.resolved_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
+    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
   };
   client.query(listIssues, (err, data) => {
     if (err)
       res.writeHead(500);
     else {
       let jsonRows = [];
-      for (let row of data.rows) {
-        jsonRows.push(row);
+      for (let row of data.rows.row) {
+        row = row.replace(/"|\)|\(/g, '').split(',');
+        const Issue = {
+          ticket_id: row[0],
+          created_by: row[1],
+          ticket_subject: row[2],
+          ticket_description: row[3],
+          resolved: ((row[4] === 't') ? true : false),
+          resolved_on: row[5],
+          created_on: row[6]
+        };
+        jsonRows.push(Issue);
       }
       jsonRows = JSON.stringify(jsonRows);
       res.send(jsonRows);

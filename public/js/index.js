@@ -1,5 +1,17 @@
 const issues = [];
-fetch('/getIssues')
+fetch('/user')
+    .then(userRes => {
+        if (userRes.status != 200) {
+            console.log(userRes.status);
+            return;
+        }
+        userRes.json().then(userData => {
+            console.log(userData);
+            let userOptions = document.getElementById('navbarDropdown');
+            userOptions.innerHTML = userData.display_name;
+        })
+    .then(
+fetch('/getIssues'))
     .then(res => {
         if (res.status !== 200) {
             console.log(res.status);
@@ -19,19 +31,6 @@ fetch('/getIssues')
             }
         });
     })
-    .catch(err => console.log(err));
-
-fetch('/user')
-    .then(res => {
-        if (res.status != 200) {
-            console.log(res.status);
-            return;
-        }
-        res.json().then(data => {
-            console.log(data);
-            let userOptions = document.getElementById('navbarDropdown');
-            userOptions.innerHTML = data.display_name;
-        })
     }).catch(err => console.log(err));
 
 function filterItems() {
@@ -59,13 +58,13 @@ function issueToString(item) {
     res += 
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
-            Ticket: #${item[0]}
+            Ticket: #${item.ticket_id}
         </div>
         <div class="card-body">
-            <h5 class="card-title">${item[2]}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item[1]}</h6>
-            <p class="card-text">${item[3]}</p>`;
-    if (item[4] === 'f') {
+            <h5 class="card-title">${item.ticket_subject}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.resolved_by}</h6>
+            <p class="card-text">${item.description}</p>`;
+    if (item.resolved === false) {
         res +=
             `<span class="badge badge-warning">Unresolved</span>
             <a href="#" class="card-link">Resolve</a>
@@ -76,7 +75,7 @@ function issueToString(item) {
         res +=
             `<span class="badge badge-success">Resolved</span>
             <div class="card-footer text-muted">
-                Resolved by: ${item[6]} on ${item[5]}
+                Resolved by: ${item.resolved_by} on ${item.resolved_on}
             </div>
         </div>
     </div>`
