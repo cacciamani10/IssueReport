@@ -5,13 +5,13 @@ fetch('/user')
             console.log(userRes.status);
             return;
         }
-        userRes.json().then(userData => {
-            console.log(userData);
-            let userOptions = document.getElementById('navbarDropdown');
-            userOptions.innerHTML = userData.display_name;
-        })
-    .then(
-fetch('/getIssues'))
+        userRes.json()
+    .then(userData => {
+        console.log(userData);
+        let userOptions = document.getElementById('navbarDropdown');
+        userOptions.innerHTML = userData.display_name;
+        return fetch('/getIssues');
+    })
     .then(res => {
         if (res.status !== 200) {
             console.log(res.status);
