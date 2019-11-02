@@ -187,8 +187,8 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
       res.writeHead(500);
     else {
       let jsonRows = [];
-      for (let row of data.rows.row) {
-        row = row.replace(/"|\)|\(/g, '').split(',');
+      for (let row of data.rows) {
+        row = row.row.replace(/"|\)|\(/g, '').split(',');
         const Issue = {
           ticket_id: row[0],
           created_by: row[1],
