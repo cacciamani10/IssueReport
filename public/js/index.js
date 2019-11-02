@@ -1,5 +1,5 @@
 const issues = [];
-let dsiplayName;
+let display_name;
 fetch('/user')
     .then(userRes => {
         if (userRes.status != 200) {
@@ -9,8 +9,8 @@ fetch('/user')
         userRes.json()
     .then(userData => {
         let userOptions = document.getElementById('navbarDropdown');
-        dsiplayName = userData.display_name; 
-        userOptions.innerHTML = dsiplayName;
+        display_name = userData.display_name; 
+        userOptions.innerHTML = display_name;
         return fetch('/getIssues');
     })
     .then(res => {
