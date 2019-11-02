@@ -59,8 +59,8 @@ function issueToString(item) {
         </div>
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.resolved_by}</h6>
-            <p class="card-text">${item.description}</p>`;
+            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
+            <p class="card-text">${item.ticket_description}</p>`;
     if (item.resolved === false) {
         res +=
             `<span class="badge badge-warning">Unresolved</span>
