@@ -25,7 +25,7 @@ fetch('/user')
             let tickets = document.getElementById('issues');
             tickets.innerHTML = '';
             for (let item of data) {
-                if (item.created_by === displayName) {
+                if (item.created_by === display_name) {
                     item.created_by = 'You';
                 }
                 issues.push(item);
