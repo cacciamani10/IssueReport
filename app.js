@@ -85,7 +85,7 @@ passport.use(new LocalStrategy (
         bcrypt.compare(password, user.password, (bcrErr, result) => {
           if (bcrErr) return done(err);
           if (result) {
-            return done(null, dataParse.shift());
+            return done(null, user);
           }
           else {
             return done(null, false);
