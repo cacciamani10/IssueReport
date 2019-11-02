@@ -215,7 +215,7 @@ app.post('/register', (req, res) => {
   const now = new Date();
   console.log('recieved req..', req.body.email);
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    console.log('hasing ', req.body.password, 'into', hash);
+    console.log(uuidv4(), req.body.display_name, req.body.email, hash, now, now);
     const createUser = {
       text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
       values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
@@ -224,6 +224,7 @@ app.post('/register', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
+      console.log('finished INSERT');
     });
   });
 });
