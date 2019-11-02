@@ -71,7 +71,7 @@ passport.use(new LocalStrategy (
 (username, password, done) => {
   console.log('Attempting to login', username,  'locally');
   const lookup = {
-    text: 'SELECT (password,  FROM users WHERE display_name = $1 OR email = $1',
+    text: 'SELECT (password, user_id, display_name)  FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
