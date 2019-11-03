@@ -75,7 +75,7 @@ function issueToString(item) {
             <div class="card-footer text-muted">
                 Resolved by: ${item.resolved_by} on ${item.resolved_on}
                 <hr>
-                ${item.resolved_notes}
+                Notes: ${item.resolved_notes}
             </div>
         </div>
     </div>`;
