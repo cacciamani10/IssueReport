@@ -151,11 +151,11 @@ app.get('/create', redirectIfLoggedOut, (req, res) => {
 });
 
 app.get('/profile', redirectIfLoggedOut, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'resolved.html'));
+  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
 });
 
-app.get('/create', redirectIfLoggedOut, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'create.html'));
+app.get('/resolved', redirectIfLoggedOut, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'resolved.html'));
 });
 
 // Auth Routes
