@@ -96,6 +96,7 @@ function issueToString(item) {
             `<span class="badge badge-success">Resolved</span>
             <div class="card-footer text-muted">
                 Resolved by: ${item.resolved_by} on ${item.resolved_on}
+                <hr>
                 Notes: ${item.resolved_notes}
             </div>
         </div>
