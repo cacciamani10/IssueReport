@@ -335,7 +335,7 @@ app.post('/resolve', (req, res) => {
   console.log('ticket_id', req.body.ticket_id);
   const now = new Date();
   const resolveTicket = {
-    text: 'UPDATE tickets SET resolve = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
+    text: 'UPDATE tickets SET resolved = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
     values: [ now, req.user.user_id, req.body.resolved_notes, req.body.ticket_id ]
   };
   console.log(resolveTicket.values);
