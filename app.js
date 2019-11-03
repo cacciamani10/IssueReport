@@ -342,7 +342,7 @@ app.post('/resolve', (req, res) => {
     if(err) {
       console.log(err.stack);
     }
-    res.redirect(req.originalUrl);
+    res.redirect(req.header('Referer'));
   });
 });
 
