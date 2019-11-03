@@ -80,7 +80,7 @@ function issueToString(item) {
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu" style="margin-left: ($spacer * .25)">
                 <form action="/resolve" class="px-4 py-3" method="post">
                     <input type="hidden" name="ticket_id" value="${item.ticket_id}">
                     <div class="form-group">
