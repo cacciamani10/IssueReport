@@ -291,7 +291,7 @@ app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.created_on, tickets.resolved_on, users.display_name, tickets.resolved_notes) FROM tickets, users WHERE tickets.resolved = TRUE;'
+    text: 'SELECT (tickets.ticket_id, (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by) , tickets.ticket_subject, tickets.ticket_description, tickets.created_on, tickets.resolved_on, (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), tickets.resolved_notes)  FROM tickets WHERE tickets.resolved = TRUE;'
   };
   client.query(listIssues, (err, data) => {
     if (err)
