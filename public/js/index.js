@@ -77,6 +77,9 @@ function issueToString(item) {
     if (!item.resolved) {
         res +=
             `<span class="badge badge-warning">Unresolved</span>
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resolve
+            </button>
             <div class="dropdown-menu">
                 <form action="/resolve" class="px-4 py-3" method="post">
                     <input type="hidden" name="ticket_id" value="${item.ticket_id}">
