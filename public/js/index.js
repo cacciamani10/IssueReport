@@ -68,6 +68,7 @@ function issueToString(item) {
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
+            ${(!item.resolved ? '<span class="badge badge-warning">Unresolved</span>' : '')}
         </div>
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
@@ -75,7 +76,7 @@ function issueToString(item) {
             <p class="card-text">${item.ticket_description}</p>`;
     if (!item.resolved) {
         res +=
-            `<span class="badge badge-warning">Unresolved</span>
+            `
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
