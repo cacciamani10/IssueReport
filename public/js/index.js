@@ -104,3 +104,32 @@ function issueToString(item) {
     }
     return res;
 }
+
+function doDropdown(event) {
+    event = event || window.event;
+    var evTarget = event.currentTarget || event.srcElement;
+    evTarget.parentElement.classList.toggle('open');
+    return false;
+}
+// from https://github.com/tagawa/bootstrap-without-jquery/blob/master/bootstrap3/bootstrap-without-jquery.js
+// Close a dropdown menu
+function closeDropdown(event) {
+    event = event || window.event;
+    var evTarget = event.currentTarget || event.srcElement;
+    evTarget.parentElement.classList.remove('open');
+    
+    // Trigger the click event on the target if it not opening another menu
+    if(event.relatedTarget && event.relatedTarget.getAttribute('data-toggle') !== 'dropdown') {
+        event.relatedTarget.click();
+    }
+    return false;
+}
+
+// Set event listeners for dropdown menus
+var dropdownList = document.querySelectorAll('[data-toggle=dropdown]');
+for (var k = 0, dropdown, lenk = dropdownList.length; k < lenk; k++) {
+    dropdown = dropdownList[k];
+    dropdown.setAttribute('tabindex', '0'); // Fix to make onblur work in Chrome
+    dropdown.onclick = doDropdown;
+    dropdown.onblur = closeDropdown;
+}
