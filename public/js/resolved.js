@@ -29,7 +29,6 @@ fetch('/user')
                 </div>`
             }
             else {
-                
                 tickets.innerHTML = '';
                 for (let item of data) {
                     if (item.created_by === display_name) {
