@@ -234,7 +234,7 @@ app.get('/user', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
+    text: 'SELECT (tickets.ticket_id, users.display_name AS created_by, tickets.ticket_subject, tickets.ticket_description, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id AND resolved = FALSE;'
   };
   client.query(listIssues, (err, data) => {
     if (err)
@@ -248,9 +248,7 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
           created_by: row[1],
           ticket_subject: row[2],
           ticket_description: row[3],
-          resolved: ((row[4] === 't') ? true : false),
-          resolved_on: row[5],
-          created_on: row[6]
+          created_on: row[4]
         };
         jsonRows.push(Issue);
       }
@@ -262,7 +260,8 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
+    text: 'SELECT (t.ticket_id, u.display_name AS created_by, t.ticket_subject, t.ticket_description, t.resolved, t.created_on, t.resolved_on, u.display_name AS resolved_by, t.resolved_notes) FROM tickets t, users u WHERE u.user_id = $1;',
+    values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
     if (err)
@@ -277,8 +276,10 @@ app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
           ticket_subject: row[2],
           ticket_description: row[3],
           resolved: ((row[4] === 't') ? true : false),
-          resolved_on: row[5],
-          created_on: row[6]
+          created_on: row[5],
+          resolved_on: row[6],
+          resolved_by: row[7],
+          resolved_notes: row[8]
         };
         jsonRows.push(Issue);
       }
@@ -290,7 +291,7 @@ app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
+    text: 'SELECT (tickets.ticket_id, users.display_name AS created_by, tickets.ticket_subject, tickets.ticket_description, tickets.created_on, tickets.resolved_on, users.display_name AS resolved_by, tickets.resolved_notes) FROM tickets, users WHERE (tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id) AND tickets.resolved = TRUE;'
   };
   client.query(listIssues, (err, data) => {
     if (err)
@@ -304,9 +305,10 @@ app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
           created_by: row[1],
           ticket_subject: row[2],
           ticket_description: row[3],
-          resolved: ((row[4] === 't') ? true : false),
+          created_on: row[4],
           resolved_on: row[5],
-          created_on: row[6]
+          resolved_by: row[6],
+          resolved_notes: row[7]
         };
         jsonRows.push(Issue);
       }
