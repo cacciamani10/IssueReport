@@ -338,6 +338,7 @@ app.post('/resolve', (req, res) => {
     text: 'UPDATE tickets SET resolve = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
     values: [ now, req.user.user_id, req.body.resolved_notes, req.body.ticket_id ]
   };
+  console.log(resolveTicket.values);
   client.query(resolveTicket, (err, data) => {
     if(err) {
       console.log(err.stack);
