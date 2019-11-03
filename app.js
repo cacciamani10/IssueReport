@@ -330,7 +330,7 @@ app.post('/create', redirectIfLoggedOut, (req, res) => {
       console.log(err.stack);
     }
   });
-  res.redirect(req.originalUrl);
+  res.redirect('/');
 });
 
 app.post('/resolve', (req, res) => {
