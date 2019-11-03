@@ -31,9 +31,6 @@ fetch('/user')
             else {
                 tickets.innerHTML = '';
                 for (let item of data) {
-                    if (item.created_by === display_name) {
-                        item.created_by = 'You';
-                    }
                     issues.push(item);
                     tickets.innerHTML += issueToString(item);
                 }
@@ -68,15 +65,29 @@ function issueToString(item) {
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
+            <span class="badge badge-${item.resolved ? 'success">Resolved' : 'warning">Unresolved'}</span>
         </div>
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
             <p class="card-text">${item.ticket_description}</p>`;
     if (!item.resolved) {
         res +=
-            `<span class="badge badge-warning">Unresolved</span>
+            `
             <a href="#" class="card-link">Resolve</a>
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resolve
+            </button>
+            <div class="dropdown-menu" style="margin-left: ($spacer * .25)">
+                <form action="/resolve" class="px-4 py-3" method="post">
+                    <input type="hidden" name="ticket_id" value="${item.ticket_id}">
+                    <div class="form-group">
+                        <label for="resolved_notes">Notes</label>
+                        <textarea class="form-control" name="resolved_notes" id="resolved_notes" placeholder="Notes"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Mark as Resolved</button>
+                </form>
+            </div>
         </div>
     </div>`;
     }
@@ -85,6 +96,7 @@ function issueToString(item) {
             `<span class="badge badge-success">Resolved</span>
             <div class="card-footer text-muted">
                 Resolved by: ${item.resolved_by} on ${item.resolved_on}
+                Notes: ${item.resolved_notes}
             </div>
         </div>
     </div>`

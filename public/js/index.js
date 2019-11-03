@@ -68,15 +68,12 @@ function issueToString(item) {
     `<div class="card" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
-            ${(!item.resolved ? '<span class="badge badge-warning">Unresolved</span>' : '')}
+            <span class="badge badge-success">Unresolved</span>
         </div>
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
-            <p class="card-text">${item.ticket_description}</p>`;
-    if (!item.resolved) {
-        res +=
-            `
+            <p class="card-text">${item.ticket_description}</p>
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
@@ -92,15 +89,5 @@ function issueToString(item) {
             </div>
         </div>
     </div>`;
-    }
-    else {
-        res +=
-            `<span class="badge badge-success">Resolved</span>
-            <div class="card-footer text-muted">
-                Resolved by: ${item.resolved_by} on ${item.resolved_on}
-            </div>
-        </div>
-    </div>`
-    }
     return res;
 }
