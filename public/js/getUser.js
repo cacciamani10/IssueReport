@@ -9,5 +9,5 @@ fetch('/user')
         let userOptions = document.getElementById('navbarDropdown');
         display_name = userData.display_name; 
         userOptions.innerHTML = display_name;
-    })
-    .catch(err => console.log(err))}
+    })})
+    .catch(err => console.log(err));

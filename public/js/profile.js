@@ -11,7 +11,7 @@ fetch('/user')
         let userOptions = document.getElementById('navbarDropdown');
         display_name = userData.display_name; 
         userOptions.innerHTML = display_name;
-        return fetch('/getIssues');
+        return fetch('/getIssues/user');
     })
     .then(res => {
         if (res.status !== 200) {
@@ -23,7 +23,7 @@ fetch('/user')
             if (data.length === 0) {
                 tickets.innerHTML = `
                 <div class="jumbotron jumbotron-fluid">
-                    <h1 class="display-4">No Tickets</h1>
+                    <h1 class="display-4">You haven't submitted and tickets.</h1>
                     <hr class="my-4">
                     <p>Click <a href="/create" role="button">here</a> to create one.</p>
                 </div>`

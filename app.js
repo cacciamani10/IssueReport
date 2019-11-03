@@ -146,16 +146,25 @@ app.get('/', redirectIfLoggedOut, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/create', redirectIfLoggedOut, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'create.html'));
+});
+
+app.get('/profile', redirectIfLoggedOut, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'resolved.html'));
+});
+
+app.get('/create', redirectIfLoggedOut, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'create.html'));
+});
+
+// Auth Routes
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'register.html'));
-})
-
-app.get('/create', redirectIfLoggedOut, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'create.html'));
 });
 
 
@@ -177,17 +186,81 @@ app.get(
   }
 ));
 
-app.get('/user', redirectIfLoggedOut, (req, res) => {
-  res.json(req.user);
+// Local Auth
+app.post(
+  '/login',  
+  passport.authenticate('local',
+  {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: 'Invalid username, email, or password'
+  }),
+);
+
+app.post('/register', (req, res) => {
+  const now = new Date();
+  console.log('recieved req..', req.body.email);
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    console.log(uuidv4(), req.body.display_name, req.body.email, hash, now, now);
+    const createUser = {
+      text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
+      values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
+    };
+    client.query(createUser, (queryErr, data) => {
+      if (err) {
+        console.log(err.stack);
+      }
+      passport.authenticate('local',
+      {
+        successRedirect: '/',
+        failureRedirect: '/login',
+        failureFlash: 'Invalid username, email, or password'
+      });
+    });
+  });
 });
 
+// Null user
 app.get('/logout', (req, res) => {
   req.session = null;
   req.user = null;
   res.redirect('/'); 
 });
 
+// API 
+app.get('/user', redirectIfLoggedOut, (req, res) => {
+  res.json(req.user);
+});
+
 app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
+  const listIssues = {
+    text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users;'
+  };
+  client.query(listIssues, (err, data) => {
+    if (err)
+      res.writeHead(500);
+    else {
+      let jsonRows = [];
+      for (let row of data.rows) {
+        row = queryToArray(row.row);
+        const Issue = {
+          ticket_id: row[0],
+          created_by: row[1],
+          ticket_subject: row[2],
+          ticket_description: row[3],
+          resolved: ((row[4] === 't') ? true : false),
+          resolved_on: row[5],
+          created_on: row[6]
+        };
+        jsonRows.push(Issue);
+      }
+      jsonRows = JSON.stringify(jsonRows);
+      res.send(jsonRows);
+    }
+  });
+});
+
+app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: 'SELECT (tickets.ticket_id, users.display_name, tickets.ticket_subject, tickets.ticket_description, tickets.resolved, tickets.resolved_on, tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id OR tickets.resolved_by = users.user_id;'
   };
@@ -214,35 +287,7 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
     }
   });
 });
-
-app.post('/register', (req, res) => {
-  const now = new Date();
-  console.log('recieved req..', req.body.email);
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    console.log(uuidv4(), req.body.display_name, req.body.email, hash, now, now);
-    const createUser = {
-      text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
-      values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
-    };
-    client.query(createUser, (queryErr, data) => {
-      if (err) {
-        console.log(err.stack);
-      }
-      res.redirect('/');
-    });
-  });
-});
-
-app.post(
-  '/login',  
-  passport.authenticate('local',
-  {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: 'Invalid username, email, or password'
-  }),
-  );
-
+// Create Issue
 app.post('/create', redirectIfLoggedOut, (req, res) => {
   const now = new Date();
   const createTicket = {
@@ -255,6 +300,10 @@ app.post('/create', redirectIfLoggedOut, (req, res) => {
     }
   });
   res.redirect('/');
+});
+
+app.post('/resolve', (req, res) => {
+  // TODO
 });
 
 app.use(express.static('public', { extensions: ['html']} ));
