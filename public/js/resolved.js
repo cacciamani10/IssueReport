@@ -11,7 +11,7 @@ fetch('/user')
         let userOptions = document.getElementById('navbarDropdown');
         display_name = userData.display_name; 
         userOptions.innerHTML = display_name;
-        return fetch('/getIssues');
+        return fetch('/getIssues/resolved');
     })
     .then(res => {
         if (res.status !== 200) {
@@ -77,16 +77,7 @@ function issueToString(item) {
     if (!item.resolved) {
         res +=
             `<span class="badge badge-warning">Unresolved</span>
-            <div class="dropdown-menu">
-                <form action="/resolve" class="px-4 py-3" method="post">
-                    <input type="hidden" name="ticket_id" value="${item.ticket_id}">
-                    <div class="form-group">
-                        <label for="resolved_notes">Notes</label>
-                        <textarea class="form-control" name="resolved_notes" id="resolved_notes" placeholder="Notes"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Mark as Resolved</button>
-                </form>
-            </div>
+            <a href="#" class="card-link">Resolve</a>
         </div>
     </div>`;
     }
