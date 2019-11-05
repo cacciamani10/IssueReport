@@ -202,12 +202,11 @@ app.post(
         text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6) RETURNING row_to_json(users.*)',
         values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
       };
-      console.log('about to attempt to log in using body', req.body);
       client.query(createUser, (queryErr, data) => {
         if (err) {
           console.log(err.stack);
         }
-        console.log('about to attempt to log in using body', req.body);
+        console.log('created user..', data);
         req.login(data.rows[0].row_to_json[0], (err) => {
           if (err) { res.redirect('/login') }
           return res.redirect('/');
