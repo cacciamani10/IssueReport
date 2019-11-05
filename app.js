@@ -222,7 +222,7 @@ app.post(
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: 'Invalid username, email, or password'
-  })
+  })(req, res, next)
 );
 
 // Null user
