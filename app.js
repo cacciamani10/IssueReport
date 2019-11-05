@@ -197,10 +197,10 @@ app.post(
     const now = new Date();
     console.log('recieved req..', req.body.email);
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-      console.log(uuidv4(), req.body.display_name, req.body.email, hash, now, now);
+      console.log(uuidv4(), req.body.username, req.body.email, hash, now, now);
       const createUser = {
         text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6) RETURNING row_to_json(users.*)',
-        values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
+        values: [ uuidv4(), req.body.username, req.body.email, hash, now, now ]
       };
       client.query(createUser, (queryErr, data) => {
         if (err) {
