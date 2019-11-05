@@ -212,13 +212,8 @@ app.post('/register', (req, res) => {
       }
       console.log('about to attempt to log in using body', req.body);
       passport.authenticate(
-        'local', 
-        {
-          failureRedirect: '/login',
-          failureFlash: 'Invalid username, email, or password',
-          passReqToCallback: true
-        }, 
-        () => {
+        'local',
+        (req, res) => {
           res.redirect('/');
         }
       )
