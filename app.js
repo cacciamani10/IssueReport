@@ -129,7 +129,6 @@ passport.use(new GoogleStrategy(
             if (err3) {
               done(err3.stack);
             }
-            console.log(data3.rows[0]);
             done(null, data3.rows[0].row_to_json[0]);
           });
         }
@@ -200,7 +199,7 @@ app.post(
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       console.log(uuidv4(), req.body.display_name, req.body.email, hash, now, now);
       const createUser = {
-        text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
+        text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6) RETURNING row_to_json(users.*)',
         values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
       };
       console.log('about to attempt to log in using body', req.body);
@@ -209,14 +208,10 @@ app.post(
           console.log(err.stack);
         }
         console.log('about to attempt to log in using body', req.body);
+        req.login(data.rows[0].row_to_json[0])
       });
     });
   }, 
-  passport.authenticate('local',
-  {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  })
 );
 
 // Null user
