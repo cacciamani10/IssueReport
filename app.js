@@ -57,7 +57,7 @@ passport.deserializeUser((user, done) => {
   };
   client.query(getUser, (err, data) => {
     if (data.rowCount !== 0) {
-      const User = data.rows[0].json_agg;
+      const User = data.rows[0].json_agg[0];
       return done(null, { user_id: User.user_id, display_name: User.display_name });
     }
     return done(err, data);
@@ -76,7 +76,7 @@ passport.use('local', new LocalStrategy (
     else {
       const now = new Date();
       if (data.rowCount !== 0) { // User was found
-        const user = data.rows[0].json_agg;
+        const user = data.rows[0].json_agg[0];
         console.log('Query returned a user', user);
         bcrypt.compare(password, user.password, (bcrErr, result) => {
           if (bcrErr) return done(err);
@@ -118,7 +118,7 @@ passport.use(new GoogleStrategy(
           };
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
             if (err2) console.log(err2.stack);
-            done(null, data.rows[0].json_agg); // Exit
+            done(null, data.rows[0].json_agg[0]); // Exit
           });
         }
         else { // User wasn't found 
@@ -130,7 +130,7 @@ passport.use(new GoogleStrategy(
             if (err3) {
               done(err3.stack);
             }
-            done(null, data3.rows[0].json_agg);
+            done(null, data3.rows[0].json_agg[0]);
           });
         }
       }
