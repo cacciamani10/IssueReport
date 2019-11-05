@@ -247,13 +247,13 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', users.display_name, 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'resolved', tickets.resolved, 'created_on', tickets.created_on) FROM tickets, users WHERE users.user_id = $1;",
+    text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', users.display_name, 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'resolved', tickets.resolved, 'created_on', tickets.created_on) FROM tickets, users WHERE tickets.created_by = $1;",
     values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
     if (err) { res.writeHead(500); }
     else {
-      let jsonRows = [];
+      let jsonRows = []; 
       for (let row of data.rows) {
         jsonRows.push(row.json_build_object);
       }
