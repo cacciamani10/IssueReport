@@ -207,8 +207,8 @@ app.post(
           console.log(err.stack);
         }
         console.log('created user..', data);
-        req.login(data.rows[0].row_to_json[0], (err) => {
-          if (err) { res.redirect('/login') }
+        req.login(data.rows[0].row_to_json, (err) => {
+          if (err) { return res.redirect('/login') }
           return res.redirect('/');
         })
       });
