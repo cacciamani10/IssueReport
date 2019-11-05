@@ -56,7 +56,7 @@ passport.deserializeUser((user, done) => {
   };
   client.query(getUser, (err, data) => {
     console.log(data.rows);
-    data.rows.json_agg.forEach(element => {
+    data.rows[0].json_agg.forEach(element => {
       console.log(element);
     });
     if (data.rowCount !== 0) {
