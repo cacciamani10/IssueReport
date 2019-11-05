@@ -109,7 +109,6 @@ passport.use(new GoogleStrategy(
     client.query(lookup, (err, data) => {
       if (err) console.log(err.stack); 
       else {
-        console.log(data);
         const now = new Date();
         if (data.rows[0].json_agg != null) { // User was found
           const updateLastLogin = {
@@ -130,7 +129,8 @@ passport.use(new GoogleStrategy(
             if (err3) {
               done(err3.stack);
             }
-            done(null, data3.rows[0].json_agg[0]);
+            console.log(data3.rows[0]);
+            done(null, data3.rows[0].row_to_json[0]);
           });
         }
       }
