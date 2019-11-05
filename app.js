@@ -233,20 +233,11 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
     text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', users.display_name, 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'created_on', tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id AND resolved = FALSE;"
   };
   client.query(listIssues, (err, data) => {
-    if (err)
-      res.writeHead(500);
+    if (err) { res.writeHead(500); }
     else {
       let jsonRows = [];
       for (let row of data.rows) {
-        row = queryToArray(row.row);
-        const Issue = {
-          ticket_id: row[0],
-          created_by: row[1],
-          ticket_subject: row[2],
-          ticket_description: row[3],
-          created_on: row[4]
-        };
-        jsonRows.push(Issue);
+        jsonRows.push(row.json_build_object);
       }
       jsonRows = JSON.stringify(jsonRows);
       res.send(jsonRows);
@@ -260,13 +251,10 @@ app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
     values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
-    if (err)
-      res.writeHead(500);
+    if (err) { res.writeHead(500); }
     else {
       let jsonRows = [];
-      console.log(data.rows)
       for (let row of data.rows) {
-        console.log(row.json_build_object);
         jsonRows.push(row.json_build_object);
       }
       jsonRows = JSON.stringify(jsonRows);
@@ -280,23 +268,11 @@ app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
     text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by) , 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'created_on', tickets.created_on, 'resolved_on', tickets.resolved_on, 'resolved_by', (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), 'resolved_notes', tickets.resolved_notes)  FROM tickets WHERE tickets.resolved = TRUE;"
   };
   client.query(listIssues, (err, data) => {
-    if (err)
-      res.writeHead(500);
+    if (err) { res.writeHead(500); }
     else {
       let jsonRows = [];
       for (let row of data.rows) {
-        row = queryToArray(row.row);
-        const Issue = {
-          ticket_id: row[0],
-          created_by: row[1],
-          ticket_subject: row[2],
-          ticket_description: row[3],
-          created_on: row[4],
-          resolved_on: row[5],
-          resolved_by: row[6],
-          resolved_notes: row[7]
-        };
-        jsonRows.push(Issue);
+        jsonRows.push(row.json_build_object);
       }
       jsonRows = JSON.stringify(jsonRows);
       res.send(jsonRows);
