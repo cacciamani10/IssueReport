@@ -51,7 +51,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   const getUser = {
-    text: 'SELECT to_json(user_id, display_name) FROM users WHERE user_id = $1',
+    text: 'SELECT json_agg(users) FROM users WHERE user_id = $1',
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
