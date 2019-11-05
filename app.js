@@ -55,14 +55,8 @@ passport.deserializeUser((user, done) => {
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
-    console.log(data);
-    const User = data.rows[0].json_agg;
     if (data.rowCount !== 0) {
-      // const dataParse = queryToArray(data.rows[0].row);
-      // const User = {
-      //   user_id: dataParse[0],
-      //   display_name: dataParse[1]
-      // };
+      const User = data.rows[0].json_agg;
       return done(null, { user_id: User.user_id, display_name: User.display_name });
     }
     return done(err, data);
@@ -73,8 +67,7 @@ passport.use('local', new LocalStrategy (
 (username, password, done) => {
   console.log('Attempting to login', username,  'locally');
   const lookup = {
-    text: 'SELECT *  FROM users WHERE display_name = $1 OR email = $1',
-    //SELECT (password, user_id, display_name)  FROM users WHERE display_name = $1 OR email = $1
+    text: 'SELECT * FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
@@ -129,7 +122,7 @@ passport.use(new GoogleStrategy(
         }
         else { // User wasn't found 
           const createUser = {
-            text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            text: 'INSERT INTO jsong_agg(users) (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
           };
           client.query(createUser, (err3, data3) => {
