@@ -210,7 +210,7 @@ app.post('/register', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
-      console.log('about to attempt to log in');
+      console.log('about to attempt to log in using body', req.body);
       passport.authenticate(
         'local', 
         {
