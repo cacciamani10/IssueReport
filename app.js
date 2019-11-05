@@ -129,7 +129,7 @@ passport.use(new GoogleStrategy(
             if (err3) {
               done(err3.stack);
             }
-            done(null, data3.rows[0].row_to_json[0]);
+            done(null, data3.rows[0].row_to_json);
           });
         }
       }
