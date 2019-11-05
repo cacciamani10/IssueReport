@@ -67,7 +67,7 @@ passport.use('local', new LocalStrategy (
 (username, password, done) => {
   console.log('Attempting to login', username,  'locally');
   const lookup = {
-    text: 'SELECT * FROM users WHERE display_name = $1 OR email = $1',
+    text: 'SELECT json_agg(users) FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
@@ -122,7 +122,7 @@ passport.use(new GoogleStrategy(
         }
         else { // User wasn't found 
           const createUser = {
-            text: 'INSERT INTO jsong_agg(users) (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            text: 'INSERT INTO users (user_id, display_name, email, created_on, last_login) VALUES ($1, $2, $3, $4, $5) RETURNING row_to_json(users.*)',
             values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
           };
           client.query(createUser, (err3, data3) => {
