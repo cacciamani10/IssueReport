@@ -22,7 +22,6 @@ const client = new Client({
 client.connect();
 
 // Middleware
-app.use(express.bodyParser);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -207,6 +206,7 @@ app.post('/register', (req, res) => {
       text: 'INSERT INTO users (user_id, display_name, email, password, created_on, last_login) VALUES($1, $2, $3, $4, $5, $6)',
       values: [ uuidv4(), req.body.display_name, req.body.email, hash, now, now ]
     };
+    console.log('about to attempt to log in using body', req.body);
     client.query(createUser, (queryErr, data) => {
       if (err) {
         console.log(err.stack);
