@@ -74,7 +74,6 @@ function issueToString(item) {
     if (!item.resolved) {
         res +=
             `
-            <a href="#" class="card-link">Resolve</a>
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
