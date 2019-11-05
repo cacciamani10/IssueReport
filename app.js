@@ -194,7 +194,7 @@ app.post(
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: 'Invalid username, email, or password'
-  }),
+  })
 );
 
 app.post(
