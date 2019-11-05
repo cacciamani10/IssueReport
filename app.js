@@ -208,7 +208,10 @@ app.post(
           console.log(err.stack);
         }
         console.log('about to attempt to log in using body', req.body);
-        req.login(data.rows[0].row_to_json[0])
+        req.login(data.rows[0].row_to_json[0], (err) => {
+          if (err) { res.redirect('/login') }
+          return res.redirect('/');
+        })
       });
     });
   }, 
