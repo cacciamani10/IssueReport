@@ -51,16 +51,17 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   const getUser = {
-    text: 'SELECT (user_id, display_name) FROM users WHERE user_id = $1',
+    text: 'SELECT to_json(user_id, display_name) FROM users WHERE user_id = $1',
     values: [ user ]
   };
   client.query(getUser, (err, data) => {
+    console.log(data);
     if (data.rowCount !== 0) {
-      const dataParse = queryToArray(data.rows[0].row);
-      const User = {
-        user_id: dataParse[0],
-        display_name: dataParse[1]
-      };
+      // const dataParse = queryToArray(data.rows[0].row);
+      // const User = {
+      //   user_id: dataParse[0],
+      //   display_name: dataParse[1]
+      // };
       return done(null, User);
     }
     return done(err, data);
@@ -181,8 +182,7 @@ app.get(
   passport.authenticate('google', 
   { 
     successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
+    failureRedirect: '/login'
   }
 ));
 
@@ -192,8 +192,7 @@ app.post(
   passport.authenticate('local',
   {
     successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: 'Invalid username, email, or password'
+    failureRedirect: '/login'
   })
 );
 
