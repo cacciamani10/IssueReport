@@ -108,12 +108,13 @@ passport.use(new GoogleStrategy(
   }, 
   (accessToken, refreshToken, profile, done) => {
     const lookup = {
-      text: 'SELECT * FROM users WHERE user_id = $1',
+      text: 'SELECT json_agg(users) FROM users WHERE user_id = $1',
       values: [ profile.id ]
     };
     client.query(lookup, (err, data) => {
       if (err) console.log(err.stack); 
       else {
+        console.log(data);
         const now = new Date();
         if (data.rowCount !== 0) { // User was found
           const updateLastLogin = {
@@ -219,8 +220,7 @@ app.post(
   passport.authenticate('local',
   {
     successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: 'Invalid username, email, or password'
+    failureRedirect: '/login'
   })
 );
 
