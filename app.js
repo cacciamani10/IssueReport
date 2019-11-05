@@ -215,7 +215,8 @@ app.post('/register', (req, res) => {
         'local', 
         {
           failureRedirect: '/login',
-          failureFlash: 'Invalid username, email, or password'
+          failureFlash: 'Invalid username, email, or password',
+          passReqToCallback: true
         }, 
         () => {
           res.redirect('/');
