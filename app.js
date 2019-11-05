@@ -210,12 +210,10 @@ app.post('/register', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
-      passport.authenticate('local',
-      {
-        successRedirect: '/',
-        failureRedirect: '/login',
-        failureFlash: 'Invalid username, email, or password'
-      });
+      console.log('about to attempt to log in');
+      passport.authenticate('local')(req, res, function () {
+        res.redirect('/account');
+    })
     });
   });
 });
