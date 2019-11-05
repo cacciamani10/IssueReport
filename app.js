@@ -67,7 +67,7 @@ passport.deserializeUser((user, done) => {
   });
 });
 
-passport.use(new LocalStrategy (
+passport.use('local', new LocalStrategy (
 (username, password, done) => {
   console.log('Attempting to login', username,  'locally');
   const lookup = {
@@ -214,6 +214,7 @@ app.post('/register', (req, res) => {
       console.log('about to attempt to log in using body', req.body);
       passport.authenticate(
         'local',
+        req,
         (req, res) => {
           res.redirect('/');
         }
