@@ -75,7 +75,7 @@ passport.use('local', new LocalStrategy (
     if (err) return done(err.stack); 
     else {
       const now = new Date();
-      if (data.rowCount !== 0) { // User was found
+      if (data.rows[0].json_agg != null) { // User was found
         const user = data.rows[0].json_agg[0];
         console.log('Query returned a user', user);
         bcrypt.compare(password, user.password, (bcrErr, result) => {
@@ -111,7 +111,7 @@ passport.use(new GoogleStrategy(
       else {
         console.log(data);
         const now = new Date();
-        if (data.rowCount !== 0) { // User was found
+        if (data.rows[0].json_agg != null) { // User was found
           const updateLastLogin = {
             text: 'UPDATE users SET last_login = $1 WHERE user_id = $2',
             values: [ now, profile.id ]
