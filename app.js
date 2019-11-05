@@ -211,9 +211,16 @@ app.post('/register', (req, res) => {
         console.log(err.stack);
       }
       console.log('about to attempt to log in');
-      passport.authenticate('local')(req, res, () => {
-        res.redirect('/');
-    })
+      passport.authenticate(
+        'local', 
+        {
+          failureRedirect: '/login',
+          failureFlash: 'Invalid username, email, or password'
+        }, 
+        () => {
+          res.redirect('/');
+        }
+      )
     });
   });
 });
