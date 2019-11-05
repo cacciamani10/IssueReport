@@ -212,13 +212,12 @@ app.post('/register', (req, res) => {
         console.log(err.stack);
       }
       console.log('about to attempt to log in using body', req.body);
-      passport.authenticate(
-        'local',
-        req,
-        (req, res) => {
-          res.redirect('/');
-        }
-      )
+      passport.authenticate('local',
+      {
+        successRedirect: '/',
+        failureRedirect: '/login',
+        failureFlash: 'Invalid username, email, or password'
+      });
     });
   });
 });
