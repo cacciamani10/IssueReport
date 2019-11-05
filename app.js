@@ -46,6 +46,7 @@ const queryToArray = (queryRow) => {
 }
 
 passport.serializeUser((user, done) => {
+  console.log('Serializing user...', user);
   done(null, user.user_id);
 });
 
