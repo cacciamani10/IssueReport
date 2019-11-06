@@ -62,7 +62,7 @@ function filterItems() {
 function issueToString(item) {
     let res = '';
     res += 
-    `<div class="card" style="margin: 30px 12px;">
+    `<div class="card border-primary" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
             <span class="badge float-right badge-${item.resolved ? 'success">Resolved' : 'warning">Unresolved'}</span>
@@ -92,7 +92,7 @@ function issueToString(item) {
     }
     else {
         res +=
-            `<div class="card-footer text-muted">
+            `<hr><div class="card-text">
                 Resolved by: ${item.resolved_by} on ${item.resolved_on}
                 ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
