@@ -235,7 +235,7 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: "SELECT json_build_object('ticket_id', ticket_id, 'created_by', created_by, 'ticket_subject', ticket_subject, 'ticket_description', ticket_description, 'resolved', resolved, 'created_on', tickets.created_on, 'resolved_on', resolved_on, 'resolved_by', resolved_by, 'resolved_notes', resolved_notes) FROM tickets INNER JOIN users ON tickets.created_by = users.user_id WHERE tickets.created_by = $1;",
+    text: "SELECT json_build_object('ticket_id', ticket_id, 'created_by', (SELECT display_name FROM users WHERE tickets.created_by = users.user_id), 'ticket_subject', ticket_subject, 'ticket_description', ticket_description, 'resolved', resolved, 'created_on', tickets.created_on, 'resolved_on', resolved_on, 'resolved_by', (SELECT display_name FROM users WHERE tickets.resolved_by = users.user_id), 'resolved_notes', resolved_notes) FROM tickets INNER JOIN users ON tickets.created_by = users.user_id WHERE tickets.created_by = $1;",
     values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
