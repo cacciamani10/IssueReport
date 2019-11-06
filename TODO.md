@@ -1,5 +1,5 @@
 V2
 Validation
-Admin Page to delete issues?
+Reset Password
 Edit issues you made: edit notes, unresolve, edit text
 Refactor

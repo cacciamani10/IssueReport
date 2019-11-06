@@ -74,7 +74,7 @@ function issueToString(item) {
             <h5 class="card-title">${item.ticket_subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
             <p class="card-text">${item.ticket_description}</p>
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
             <div class="dropdown-menu" style="margin-left: ($spacer * .25)">
