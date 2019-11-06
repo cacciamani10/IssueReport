@@ -74,7 +74,7 @@ function issueToString(item) {
             <p class="card-text">${item.ticket_description}</p>
             <div class="card-footer text-muted">
             Resolved by: ${item.resolved_by} on ${item.resolved_on}
-            ${(item.resolved_notes == null ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
+            ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>
     </div>`;
