@@ -247,7 +247,8 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
-    text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by), 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'resolved', tickets.resolved, 'created_on', tickets.created_on, 'resolved_on', tickets.resolved_on, 'resolved_by', (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), 'resolved_notes', tickets.resolved_notes) FROM tickets, users WHERE tickets.created_by = $1;",
+    text: "SELECT json_build_object('ticket_id', ticket_id, 'created_by', created_by, 'ticket_subject', ticket_subject, 'ticket_description', ticket_description, 'resolved', resolved, 'created_on', created_on, 'resolved_on', resolved_on, 'resolved_by', resolved_by, 'resolved_notes', resolved_notes) FROM tickets INNER JOIN users ON tickets.created_by = users.user_id WHERE tickets.created_by = $1;",
+    //"SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by), 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'resolved', tickets.resolved, 'created_on', tickets.created_on, 'resolved_on', tickets.resolved_on, 'resolved_by', (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), 'resolved_notes', tickets.resolved_notes) FROM tickets, users WHERE tickets.created_by = $1;",
     values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
