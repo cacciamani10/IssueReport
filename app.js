@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
+const { check, validationResult } = require('express-validator');
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -174,7 +175,15 @@ app.post(
 
 app.post(
   '/register', 
+  [ 
+
+    check('display_name').isLength({ min: 3 }).escape(),
+    check('email').isEmail().normalizeEmail(),
+    check('password').isLength({ min: 6 }).trim().escape()
+ ],
   (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) { console.log (errors); return res.status(422).jsonp(errors.array()); }
     const now = new Date();
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       console.log(uuidv4(), req.body.username, req.body.email, hash, now, now);
