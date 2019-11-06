@@ -93,7 +93,7 @@ function issueToString(item) {
     else {
         res +=
             `<hr><div class="card-text">
-                Resolved by: ${item.resolved_by} on ${dateString(item.resolved_on)}
+                Resolved by: ${(item.resolved_by === display_name ? 'You' : item.resolved_by)} on ${dateString(item.resolved_on)}
                 ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>

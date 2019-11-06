@@ -73,9 +73,14 @@ function issueToString(item) {
             <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
             <p class="card-text">${item.ticket_description}</p>
             <div class="card-text">
-            <hr>Resolved by: ${(item.resolved_by === display_name ? 'You' : item.resolved_by)} on ${item.resolved_on}
+            <hr>Resolved by: ${(item.resolved_by === display_name ? 'You' : item.resolved_by)} on ${dateString(item.resolved_on)}
             ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>
     </div>`;
+}
+
+const dateString = (date) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString() + ' at ' + dateObj.toLocaleTimeString();
 }
