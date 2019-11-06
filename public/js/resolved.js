@@ -63,7 +63,7 @@ function filterItems() {
 }
 
 function issueToString(item) {
-    return `<div class="card" style="margin: 30px 12px;">
+    return `<div class="card border-primary shadow" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
             <span class="badge float-right badge-success">Resolved</span>
@@ -72,8 +72,8 @@ function issueToString(item) {
             <h5 class="card-title">${item.ticket_subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Created by: ${item.created_by}</h6>
             <p class="card-text">${item.ticket_description}</p>
-            <div class="card-footer text-muted">
-            Resolved by: ${item.resolved_by} on ${item.resolved_on}
+            <div class="card-text">
+            <hr>Resolved by: ${item.resolved_by} on ${item.resolved_on}
             ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>

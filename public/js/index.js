@@ -65,7 +65,7 @@ function filterItems() {
 function issueToString(item) {
     let res = '';
     res += 
-    `<div class="card" style="margin: 30px 12px;">
+    `<div class="card border-primary shadow" style="margin: 30px 12px;">
         <div class="card-header" style="font-weight: 500;">
             Ticket: #${item.ticket_id}
             <span class="badge float-right badge-warning">Unresolved</span>
