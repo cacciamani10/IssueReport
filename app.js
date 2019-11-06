@@ -183,7 +183,7 @@ app.post(
  ],
   (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) { console.log (errors); return res.status(422).redirect('/register').jsonp(errors.array()); }
+    if (!errors.isEmpty()) { console.log (errors); return res.status(422).jsonp(errors.array()).redirect('/register'); }
     const now = new Date();
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       console.log(uuidv4(), req.body.username, req.body.email, hash, now, now);
