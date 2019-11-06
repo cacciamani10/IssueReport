@@ -34,19 +34,13 @@ app.use(passport.session());
 
 const redirectIfLoggedOut = (req, res, next) => {
   if (req.user == null) {
-    console.log('no user');
     res.redirect('/login');
   } else {
     next();
   }
 };
 
-const queryToArray = (queryRow) => {
-  return queryRow.replace(/"|\)|\(/g, '').split(',');
-}
-
 passport.serializeUser((user, done) => {
-  console.log('Serializing user...', user);
   done(null, user.user_id);
 });
 
@@ -66,7 +60,6 @@ passport.deserializeUser((user, done) => {
 
 passport.use('local', new LocalStrategy (
 (username, password, done) => {
-  console.log('Attempting to login', username,  'locally');
   const lookup = {
     text: 'SELECT json_agg(users) FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
@@ -77,7 +70,6 @@ passport.use('local', new LocalStrategy (
       const now = new Date();
       if (data.rows[0].json_agg != null) { // User was found
         const user = data.rows[0].json_agg[0];
-        console.log('Query returned a user', user);
         bcrypt.compare(password, user.password, (bcrErr, result) => {
           if (bcrErr) return done(err);
           if (result) {
@@ -195,7 +187,6 @@ app.post(
   '/register', 
   (req, res) => {
     const now = new Date();
-    console.log('recieved req..', req.body.email);
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       console.log(uuidv4(), req.body.username, req.body.email, hash, now, now);
       const createUser = {
@@ -206,7 +197,6 @@ app.post(
         if (err) {
           console.log(err.stack);
         }
-        console.log('created user..', data);
         req.login(data.rows[0].row_to_json, (err) => {
           if (err) { return res.redirect('/login') }
           return res.redirect('/');
@@ -248,7 +238,6 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: "SELECT json_build_object('ticket_id', ticket_id, 'created_by', created_by, 'ticket_subject', ticket_subject, 'ticket_description', ticket_description, 'resolved', resolved, 'created_on', tickets.created_on, 'resolved_on', resolved_on, 'resolved_by', resolved_by, 'resolved_notes', resolved_notes) FROM tickets INNER JOIN users ON tickets.created_by = users.user_id WHERE tickets.created_by = $1;",
-    //"SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by), 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'resolved', tickets.resolved, 'created_on', tickets.created_on, 'resolved_on', tickets.resolved_on, 'resolved_by', (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), 'resolved_notes', tickets.resolved_notes) FROM tickets, users WHERE tickets.created_by = $1;",
     values: [ req.user.user_id ]
   };
   client.query(listIssues, (err, data) => {
@@ -289,25 +278,19 @@ app.post('/create', redirectIfLoggedOut, (req, res) => {
     values: [ req.user.user_id, req.body.subject, req.body.description, now]
   };
   client.query(createTicket, (err, data) => {
-    if (err) {
-      console.log(err.stack);
-    }
+    if (err) { console.log(err.stack); }
   });
   res.redirect('/');
 });
 
 app.post('/resolve', (req, res) => {
-  console.log('ticket_id', req.body.ticket_id);
   const now = new Date();
   const resolveTicket = {
     text: 'UPDATE tickets SET resolved = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
     values: [ now, req.user.user_id, req.body.resolved_notes, req.body.ticket_id ]
   };
-  console.log(resolveTicket.values);
   client.query(resolveTicket, (err, data) => {
-    if(err) {
-      console.log(err.stack);
-    }
+    if(err) { console.log(err.stack); }
     res.redirect(req.header('Referer'));
   });
 });
