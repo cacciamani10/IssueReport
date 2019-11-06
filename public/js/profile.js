@@ -104,5 +104,5 @@ function issueToString(item) {
 
 const dateString = (date) => {
     const dateObj = new Date(date);
-    return dateObj.toLocaleDateString() + ' at ' + dateObj.toLocaleTimeString();
+    return dateObj.toLocaleDateString() + ' at ' + dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 }
