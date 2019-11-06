@@ -23,7 +23,7 @@ fetch('/user')
             if (data.length === 0) {
                 tickets.innerHTML = `
                 <div class="jumbotron jumbotron-fluid">
-                    <h1 class="display-4">You haven't submitted and tickets.</h1>
+                    <h1 class="display-4">You haven't submitted any tickets.</h1>
                     <hr class="my-4">
                     <p>Click <a href="/create" role="button">here</a> to create one.</p>
                 </div>`
@@ -104,5 +104,5 @@ function issueToString(item) {
 
 const dateString = (date) => {
     const dateObj = new Date(date);
-    return dateObj.toLocaleDateString() + ' at ' + dateObj.atLocaleTimeString();
+    return dateObj.toLocaleDateString() + ' at ' + dateObj.toLocaleTimeString();
 }
