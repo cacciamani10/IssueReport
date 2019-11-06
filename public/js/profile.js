@@ -93,7 +93,7 @@ function issueToString(item) {
     else {
         res +=
             `<hr><div class="card-text">
-                Resolved by: ${item.resolved_by} on ${item.resolved_on}
+                Resolved by: ${item.resolved_by} on ${dateString(item.resolved_on)}
                 ${(item.resolved_notes == '' ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>
@@ -102,3 +102,7 @@ function issueToString(item) {
     return res;
 }
 
+const dateString = (date) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString() + ' at ' + dateObj.atLocaleTimeString();
+}
