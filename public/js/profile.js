@@ -94,11 +94,11 @@ function issueToString(item) {
         res +=
             `<div class="card-footer text-muted">
                 Resolved by: ${item.resolved_by} on ${item.resolved_on}
-                <hr>
-                Notes: ${item.resolved_notes}
+                ${(item.resolved_notes == null ? '' : `<hr> Notes: ${item.resolved_notes}`)} 
             </div>
         </div>
     </div>`
     }
     return res;
 }
+
