@@ -33,11 +33,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const redirectIfLoggedOut = (req, res, next) => {
-  if (req.user == null) {
-    res.redirect('/login');
-  } else {
-    next();
-  }
+  if (req.user == null) { res.redirect('/login'); } 
+  else { next(); }
 };
 
 passport.serializeUser((user, done) => {
@@ -65,24 +62,18 @@ passport.use('local', new LocalStrategy (
     values: [ username ]
   };
   client.query(lookup, (err, data) => {
-    if (err) return done(err.stack); 
+    if (err) { return done(err.stack); }
     else {
       const now = new Date();
       if (data.rows[0].json_agg != null) { // User was found
         const user = data.rows[0].json_agg[0];
         bcrypt.compare(password, user.password, (bcrErr, result) => {
-          if (bcrErr) return done(err);
-          if (result) {
-            return done(null, user);
-          }
-          else {
-            return done(null, false);
-          }
+          if (bcrErr) { return done(err); }
+          if (result) { return done(null, user); }
+          else { return done(null, false); }
         });
       }
-      else {  // user wasn't found
-        return done(null, false);
-      }
+      else { return done(null, false); } // user wasn't found
     }
   });
 }));
@@ -99,7 +90,7 @@ passport.use(new GoogleStrategy(
       values: [ profile.id ]
     };
     client.query(lookup, (err, data) => {
-      if (err) console.log(err.stack); 
+      if (err) { console.log(err.stack); }
       else {
         const now = new Date();
         if (data.rows[0].json_agg != null) { // User was found
@@ -108,7 +99,7 @@ passport.use(new GoogleStrategy(
             values: [ now, profile.id ]
           };
           client.query(updateLastLogin, (err2, data2) => { // Touch login time
-            if (err2) console.log(err2.stack);
+            if (err2) { console.log(err2.stack); }
             done(null, data.rows[0].json_agg[0]); // Exit
           });
         }
@@ -118,9 +109,7 @@ passport.use(new GoogleStrategy(
             values: [ profile.id, profile.displayName, profile.emails[0].value, now, now ]
           };
           client.query(createUser, (err3, data3) => {
-            if (err3) {
-              done(err3.stack);
-            }
+            if (err3) { done(err3.stack); }
             done(null, data3.rows[0].row_to_json);
           });
         }
