@@ -34,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
   if (req.secure) { next(); }
-  else { res.redirect('https://' + req.headers.host + req.url ); }
+  else {console.log('Redirecting to https'); res.redirect('https://' + req.headers.host + req.url ); }
 });
 const redirectIfLoggedOut = (req, res, next) => {
   if (req.user == null) { res.redirect('/login'); } 
