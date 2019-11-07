@@ -33,7 +33,7 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  if (req.secure) { next(); }
+  if (req.host.contains('https://')) { next(); }
   else {console.log('Rec.secure =', req.secure,'\nRedirecting to','https://' + req.headers.host + req.url); res.redirect('https://' + req.headers.host + req.url ); }
 });
 const redirectIfLoggedOut = (req, res, next) => {
