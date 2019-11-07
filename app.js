@@ -269,7 +269,14 @@ app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
 });
 
 // Create Issue
-app.post('/create', redirectIfLoggedOut, (req, res) => {
+app.post(
+  '/create', 
+  [
+    redirectIfLoggedOut,
+    check('subject').isLength({ min: 3 }).escape(),
+    check('description').escape()
+  ],
+  (req, res) => {
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',
