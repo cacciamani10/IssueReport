@@ -166,7 +166,7 @@ app.get(
 
 // Local Auth
 app.post(
-  '/login',  
+  '/login', 
   passport.authenticate('local',
   {
     successRedirect: '/',
@@ -289,7 +289,14 @@ app.post(
   res.redirect('/');
 });
 
-app.post('/resolve', (req, res) => {
+app.post(
+  '/resolve',
+  [
+    redirectIfLoggedOut,
+    check('resolved_notes').escape(),
+    check('ticket_id').isNumeric()
+  ],
+ (req, res) => {
   const now = new Date();
   const resolveTicket = {
     text: 'UPDATE tickets SET resolved = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
