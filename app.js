@@ -56,8 +56,9 @@ passport.deserializeUser((user, done) => {
   });
 });
 
-passport.use('local', new LocalStrategy (
-(username, password, done) => {
+passport.use(
+  'local', new LocalStrategy (
+  (username, password, done) => {
   const lookup = {
     text: 'SELECT json_agg(users) FROM users WHERE display_name = $1 OR email = $1',
     values: [ username ]
@@ -73,11 +74,11 @@ passport.use('local', new LocalStrategy (
           if (result) { return done(null, user); }
           else { return done(null, false); }
         });
-      }
-      else { return done(null, false); } // user wasn't found
+      } // user wasn't found
+      else { return done(null, false); } 
     }
-  });
-}));
+  });})
+);
 
 passport.use(new GoogleStrategy(
   {
@@ -175,15 +176,14 @@ app.post(
 
 app.post(
   '/register', 
-  [ 
-
+  [
     check('display_name').isLength({ min: 3 }).escape(),
     check('email').isEmail().normalizeEmail(),
     check('password').isLength({ min: 6 }).trim().escape()
- ],
+  ],
   (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) { console.log (errors); return res.status(422).redirect('/register').jsonp(errors.array()); }
+    if (!errors.isEmpty()) { console.log (errors); return res.status(422).redirect('/register'); }
     const now = new Date();
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       console.log(uuidv4(), req.body.username, req.body.email, hash, now, now);
