@@ -33,8 +33,8 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-  if (req.host.includes('https://')) { next(); }
-  else {console.log('req.host', req.host); res.redirect('https://' + req.headers.host + req.url ); }
+  if (req.protocol === 'https') { next(); }
+  else {console.log('req.protocol', req.protocol); res.redirect('https://' + req.headers.host + req.url ); }
 });
 const redirectIfLoggedOut = (req, res, next) => {
   if (req.user == null) { res.redirect('/login'); } 
