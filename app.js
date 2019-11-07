@@ -174,11 +174,10 @@ app.post(
   })
 );
 
-
 app.post(
   '/register', 
   [
-    check('display_name').isLength({ min: 3 }).escape(),
+    check('username').isLength({ min: 3 }).escape(),
     check('email').isEmail().normalizeEmail(),
     check('password').isLength({ min: 6 }).trim().escape()
   ],
