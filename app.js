@@ -1,5 +1,6 @@
 // Includes
 const express = require('express');
+const secure = require('express-force-https');
 const { Client } = require('pg');
 const path = require('path');
 const passport = require('passport');
@@ -32,10 +33,7 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res, next) => {
-  if (req.protocol === 'https') { next(); }
-  else {console.log('req.protocol', req.protocol); res.redirect('https://' + req.headers.host + req.url ); }
-});
+app.use(secure);
 const redirectIfLoggedOut = (req, res, next) => {
   if (req.user == null) { res.redirect('/login'); } 
   else { next(); }
