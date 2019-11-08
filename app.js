@@ -278,7 +278,7 @@ app.post(
     check('description').escape()
   ],
   (req, res) => {
-  if (!validationResult(req).isEmpty()) { console.log (errors); return res.status(422).redirect('/create'); }
+  if (!validationResult(req).isEmpty()) { console.log (validationResult(req)); return res.status(422).redirect('/create'); }
   const now = new Date();
   const createTicket = {
     text: 'INSERT INTO tickets(created_by, ticket_subject, ticket_description, created_on) VALUES($1, $2, $3, $4)',

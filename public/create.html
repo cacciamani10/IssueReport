@@ -45,10 +45,12 @@
             <div class="form-group">    
                 <label for="subject">Subject</label>
                 <input name="subject" id="subject" type="text" class="form-control" placeholder="Subject" required>
+                <div id="invalid-subject" class="invalid-feedback"></div>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" name="description" id="description" placeholder="Enter a description" required></textarea> 
+                <div id="invalid-description" class="invalid-feedback"></div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
