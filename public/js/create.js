@@ -22,7 +22,7 @@ const verifyForm = () => {
 
 window.addEventListener('load', () => {
     let form = document.getElementsByClassName('-form');
-    let validation = Array.prototype.filter(form, (f) => {
+    let validation = Array.prototype.filter.call(form, (f) => {
         f.addEventListener('submit', (event) => {
             if (!verifyForm()) {
                 event.preventDefualt();
