@@ -3,6 +3,7 @@ const express = require('express');
 const secure = require('express-force-https');
 const { Client } = require('pg');
 const path = require('path');
+const favicon = require('serve-favicon');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
@@ -26,7 +27,7 @@ client.connect();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(favicon(path.join(__dirname, 'public', 'img', 'favicon.ico')));
 app.use(cookieSession({
   maxAge: 24 * 60 * 20 * 1000, // 1 day
   keys: [ process.env.COOKIE_KEY ]
