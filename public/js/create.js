@@ -28,6 +28,7 @@ window.addEventListener('load', () => {
                 event.preventDefualt();
                 event.stopPropagation();
             }
+            f.addClass('was-validated');
         }, false);
     });
 }, false);
