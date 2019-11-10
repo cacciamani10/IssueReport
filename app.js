@@ -216,17 +216,16 @@ app.post(
   const getUser = {
     text: "SELECT json_build_object('display_name', display_name) FROM users WHERE email = $1",
     values: [req.body.email]
-  };
+  }; 
   client.query(getUser, (err, data) => {
     if (err) {  return res.render('/login', { errors: err }) }
-    console.log(data);
     const User = data.rows[0].json_build_object;
     let transporter = nodeMailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
-        user: 'issuetracker.donotreply@gmail.com',
+        user: 'issuetracker.donotreply',
         pass: process.env.GMAIL_PASSWORD
       }
     });
