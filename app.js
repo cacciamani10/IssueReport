@@ -213,24 +213,33 @@ app.post(
     check('email').isEmail().normalizeEmail()
   ], 
   (req, res) => {
-  let transporter = nodeMailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'issuetracker.donotreply@gmail.com',
-      pass: process.env.GMAIL_PASSWORD
-    }
-  });
-  let mailOptions = {
-    to: req.body.email,
-    subject: 'Password Reset: DO NOT REPLY',
-    body: require('./emailBody')(req.user.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+  const getUser = {
+    text: "SELECT json_build_object('display_name', display_name) FROM users WHERE email = $1",
+    values: [req.body.email]
   };
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) { return console.log(err); }
-    console.log(`Message ${info.messageId} sent ${info.response}`);
-  });
+  client.query(getUser, (err, data) => {
+    if (err) {  return res.render('/login', { errors: err }) }
+    const User = data.rows[0].row.json_build_object;
+    let transporter = nodeMailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'issuetracker.donotreply@gmail.com',
+        pass: process.env.GMAIL_PASSWORD
+      }
+    });
+    let mailOptions = {
+      to: req.body.email,
+      subject: 'Password Reset: DO NOT REPLY',
+      body: require('./emailBody')(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+    };
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) { return console.log(err); }
+      console.log(`Message ${info.messageId} sent ${info.response}`);
+    });
+  })
+  
 });
 
 // Null user
