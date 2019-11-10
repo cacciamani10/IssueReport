@@ -5,6 +5,7 @@ const { Client } = require('pg');
 const path = require('path');
 const favicon = require('serve-favicon');
 const passport = require('passport');
+const nodeMailer = require('nodemailer');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const uuidv4 = require('uuid/v4');
@@ -205,6 +206,30 @@ app.post(
     });
   }, 
 );
+XfC891cvt
+app.post(
+  '/resetPassword',
+  [], 
+  (req, res) => {
+  let transporter = nodeMailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'issuetracker.donotreply@gmail.com',
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+  let mailOptions = {
+    to: req.body.email,
+    subject: 'Password Reset: DO NOT REPLY',
+    body: require('./emailBody')(req.user.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+  };
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) { return console.log(err); }
+    console.log(`Message ${info.messageId} sent ${info.response}`);
+  });
+});
 
 // Null user
 app.get('/logout', (req, res) => {
