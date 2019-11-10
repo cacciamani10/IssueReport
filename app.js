@@ -209,7 +209,9 @@ app.post(
 
 app.post(
   '/resetPassword',
-  [], 
+  [
+    check('email').isEmail().normalizeEmail()
+  ], 
   (req, res) => {
   let transporter = nodeMailer.createTransport({
     host: 'smtp.gmail.com',
