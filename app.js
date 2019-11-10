@@ -219,7 +219,8 @@ app.post(
   };
   client.query(getUser, (err, data) => {
     if (err) {  return res.render('/login', { errors: err }) }
-    const User = data.rows[0].row.json_build_object;
+    console.log(data);
+    //const User = data.rows[0].row.json_build_object;
     let transporter = nodeMailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
