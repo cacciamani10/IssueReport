@@ -217,7 +217,7 @@ app.get('/logout', (req, res) => {
 app.get('/user', redirectIfLoggedOut, (req, res) => {
   res.json(req.user);
 });
-
+// Main issue page - Non resolved
 app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', users.display_name, 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'created_on', tickets.created_on) FROM tickets, users WHERE tickets.created_by = users.user_id AND resolved = FALSE;"
@@ -234,7 +234,7 @@ app.get('/getIssues', redirectIfLoggedOut, (req, res) => {
     }
   });
 });
-
+// Issues displayed on profile - created by the user
 app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: "SELECT json_build_object('ticket_id', ticket_id, 'created_by', (SELECT display_name FROM users WHERE tickets.created_by = users.user_id), 'ticket_subject', ticket_subject, 'ticket_description', ticket_description, 'resolved', resolved, 'created_on', tickets.created_on, 'resolved_on', resolved_on, 'resolved_by', (SELECT display_name FROM users WHERE tickets.resolved_by = users.user_id), 'resolved_notes', resolved_notes) FROM tickets INNER JOIN users ON tickets.created_by = users.user_id WHERE tickets.created_by = $1;",
@@ -252,7 +252,7 @@ app.get('/getIssues/user', redirectIfLoggedOut, (req, res) => {
     }
   });
 });
-
+// Issues displayed on resolved - resolved only
 app.get('/getIssues/resolved', redirectIfLoggedOut, (req, res) => {
   const listIssues = {
     text: "SELECT json_build_object('ticket_id', tickets.ticket_id, 'created_by', (SELECT users.display_name AS created_by FROM users WHERE users.user_id = tickets.created_by) , 'ticket_subject', tickets.ticket_subject, 'ticket_description', tickets.ticket_description, 'created_on', tickets.created_on, 'resolved_on', tickets.resolved_on, 'resolved_by', (SELECT users.display_name AS resolved_by FROM users WHERE users.user_id = tickets.resolved_by), 'resolved_notes', tickets.resolved_notes)  FROM tickets WHERE tickets.resolved = TRUE;"
@@ -290,7 +290,7 @@ app.post(
   });
   res.redirect('/');
 });
-
+// Resolving an issue route
 app.post(
   '/resolve',
   [
@@ -298,7 +298,7 @@ app.post(
     check('resolved_notes').escape(),
     check('ticket_id').isNumeric()
   ],
- (req, res) => {
+  (req, res) => {
   const now = new Date();
   const resolveTicket = {
     text: 'UPDATE tickets SET resolved = TRUE, resolved_on = $1, resolved_by = $2, resolved_notes = $3 WHERE ticket_id = $4',
@@ -311,5 +311,8 @@ app.post(
 });
 
 app.use(express.static('public', { extensions: ['html']} ));
+app.all('/*', redirectIfLoggedOut, (req, res) => {
+  res.redirect('/');
+});
 
 app.listen(PORT);
