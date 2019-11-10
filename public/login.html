@@ -37,31 +37,31 @@
             </div>
             <button type="submit" class="btn btn-primary mr-4">Submit</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#forgot-password">Forgot My Password</button>
-            <div class="modal fade" id="forgot-password" tabindex="-1" role="dialog" aria-labelledby="forgot-password-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="forgot-password-title">Forgot Password</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="/resetPassword" method="post"></form>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="email">Enter Your Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-                                </div>
-                            </div>  
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary mr-auto">Send Email</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            </div>
-                         </form>
+        </form>
+        <div class="modal fade" id="forgot-password" tabindex="-1" role="dialog" aria-labelledby="forgot-password-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="forgot-password-title">Forgot Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <form action="/resetPassword" method="post"></form>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="email">Enter Your Email</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                            </div>
+                        </div>  
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary mr-auto">Send Email</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                        </form>
                 </div>
             </div>
-        </form>
+        </div>
         <hr>
         <form action="/auth/google" method="GET">
             <input type="image" src="img/btn_google_signin_light_focus_web.png" alt="Sign in With Google">
