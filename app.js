@@ -239,9 +239,9 @@ app.post(
       from: 'issuetracker.donotreply@gmail.com',
       to: req.body.email,
       subject: 'Password Reset: DO NOT REPLY',
-      body: emailBody(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+      text: emailBody(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
     };
-    console.log('Sending to', mailOptions.to, '\n', mailOptions.subject, mailOptions.body);
+    console.log('Sending to', mailOptions.to, '\n', mailOptions.subject, mailOptions.text);
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) { console.log(err); }
       else {
