@@ -18,6 +18,20 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+const transporter = nodeMailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'issuetracker.donotreply',
+    pass: process.env.GMAIL_PASSWORD
+  }
+});
+transporter.verify((err, success) => {
+  if (err) { console.log('Transporter Error', error); }
+  else { console.log('Successful connection', success); }
+});
+
 // Init DB
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -220,15 +234,7 @@ app.post(
   client.query(getUser, (err, data) => {
     if (err) {  return res.render('/login', { errors: err }) }
     const User = data.rows[0].json_build_object;
-    let transporter = nodeMailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'issuetracker.donotreply',
-        pass: process.env.GMAIL_PASSWORD
-      }
-    });
+    
     let mailOptions = {
       to: req.body.email,
       subject: 'Password Reset: DO NOT REPLY',
