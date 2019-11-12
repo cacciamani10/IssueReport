@@ -1,4 +1,4 @@
-module.exports = (name, url, key) => {
+module.exports.emailBody = (name, url, key) => {
     return 
     `Hello ${name},
     
