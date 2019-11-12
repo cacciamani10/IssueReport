@@ -1,5 +1,5 @@
 module.exports = (name, url, key) => {
-    
+    console.log('In module function', name);
     return  `Hello ${name},
     
     To reset your email, please visit,
