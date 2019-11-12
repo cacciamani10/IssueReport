@@ -234,15 +234,19 @@ app.post(
   client.query(getUser, (err, data) => {
     if (err) {  return res.render('/login', { errors: err }) }
     const User = data.rows[0].json_build_object;
-    
+    const emailBody = require('./emailBody')(User.display_name, req.protocol + '://' + req.get('host'), uuidv4());
     let mailOptions = {
       to: req.body.email,
       subject: 'Password Reset: DO NOT REPLY',
-      body: require('./emailBody')(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+      body: emailBody
     };
+    console.log('Sending to', mailOptions.to, '\n', mailOptions.subject, mailOptions.body);
     transporter.sendMail(mailOptions, (err, info) => {
-      if (err) { return console.log(err); }
-      console.log(`Message ${info.messageId} sent ${info.response}`);
+      if (err) { console.log(err); }
+      else {
+        console.log(`Message ${info.messageId} sent ${info.response}`);
+        res.redirect('/login');
+      }
     });
   })
   
