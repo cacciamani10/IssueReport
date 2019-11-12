@@ -23,7 +23,7 @@ const transporter = nodeMailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: 'issuetracker.donotreply',
+    user: 'issuetracker.donotreply@gmail.com',
     pass: process.env.GMAIL_PASSWORD
   }
 });
