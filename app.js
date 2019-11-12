@@ -236,6 +236,7 @@ app.post(
     const User = data.rows[0].json_build_object;
     const emailBody = require('./emailBody');
     let mailOptions = {
+      from: 'issuetracker.donotreply@gmail.com',
       to: req.body.email,
       subject: 'Password Reset: DO NOT REPLY',
       body: emailBody(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
