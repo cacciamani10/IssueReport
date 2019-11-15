@@ -135,7 +135,7 @@ function makeEditable(card) {
             <span class="badge float-right badge-${ticketToRender.resolved ? 'success">Resolved' : 'warning">Unresolved'}</span>
         </div>
         <div class="card-body">
-            <form action="/edit">
+            <form action="/edit" method="post">
             <input type="hidden" name="ticket_id" value="${ticketToRender.ticket_id}">
             <div class="form-group">
                 <input type="text" class="card-title form-control" name="subject" value="${ticketToRender.ticket_subject}">
