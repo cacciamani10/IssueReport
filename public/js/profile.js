@@ -111,5 +111,5 @@ const dateString = (date) => {
 }
 
 function makeEditable(card) {
-    console.log(this.parentElement);
+    let wholeCard = card.parentElement.parentElement;
 }
