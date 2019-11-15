@@ -399,6 +399,25 @@ app.post(
   });
 });
 
+app.post(
+  '/edit',
+  [
+    redirectIfLoggedOut,
+    check('subject').isLength({ min: 3 }).escape(),
+    check('description').escape(),
+    check('ticket_id').isNumeric()
+  ],
+  (req, res) => {
+    const editTicket = {
+      text: 'UPDATE tickets SET ticket_subject = $1, ticket_description = $2 WHERE ticket_id = $3',
+      values: [ req.body.subject, req.body.description, req.body.ticket_id ]
+    };
+    client.query(editTicket, (err, data) => {
+      if(err) { console.log(err.stack); }
+      res.redirect(req.header('Referer'));
+    });
+});
+
 app.use(express.static('public', { extensions: ['html']} ));
 app.all('/*', redirectIfLoggedOut, (req, res) => {
   res.redirect('/');

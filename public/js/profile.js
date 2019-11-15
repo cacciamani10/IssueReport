@@ -74,11 +74,11 @@ function issueToString(item) {
     if (!item.resolved) {
         res +=
             `
-            <button type="button" class="btn btn-success" onclick="makeEditable(this)">
-                Edit
-            </button>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
+            </button>
+            <button type="button" class="btn btn-success float-right" onclick="makeEditable(this)">
+                Edit
             </button>
             <div class="dropdown-menu" style="margin-left: ($spacer * .25); min-width: 80%;">
                 <form action="/resolve" class="px-4 py-3" method="post">
@@ -136,11 +136,16 @@ function makeEditable(card) {
         </div>
         <div class="card-body">
             <form action="/edit">
-            <input type="text" class="card-title form-control" value="${ticketToRender.ticket_subject}">
+            <input type="hidden" name="ticket_id" value="${ticketToRender.ticket_id}">
+            <div class="form-group">
+                <input type="text" class="card-title form-control" name="subject" value="${ticketToRender.ticket_subject}">
+            </div>
             <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
-            <input type="text" class="card-text form-control" value="${ticketToRender.ticket_description}">
+            <div class="form-group">
+                <input type="text" class="card-text form-control" name="description" value="${ticketToRender.ticket_description}">
+            </div>
             <button type="submit" class="btn btn-primary">Finish</button>
-            <button type="button" class="btn btn-danger" onclick="cancelEdit(this)">
+            <button type="button" class="btn btn-danger float-right" onclick="cancelEdit(this)">
                 Cancel
             </button>
         </div>
