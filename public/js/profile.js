@@ -136,9 +136,9 @@ function makeEditable(card) {
         </div>
         <div class="card-body">
             <form action="/edit">
-            <input type="text" class="card-title form-control" value="${item.ticket_subject}">
+            <input type="text" class="card-title form-control" value="${ticketToRender.ticket_subject}">
             <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
-            <input type="text" class="card-text form-control" value="${item.ticket_description}">
+            <input type="text" class="card-text form-control" value="${ticketToRender.ticket_description}">
             <button type="submit" class="btn btn-primary">Finish</button>
             <button type="button" class="btn btn-danger" onclick="cancelEdit(this)">
                 Cancel
