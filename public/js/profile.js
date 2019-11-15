@@ -115,7 +115,7 @@ function makeEditable(card) {
     let wholeCard = card.parentElement.parentElement;
     let header = wholeCard.querySelector('div.card-header')
     let indexOfTicketID = header.innerText.indexOf('#') + 1;
-    let ticket_id = header.innerText.substring(indexOfTicketID + 1, header.innerText.indexOf('\n'));
+    let ticket_id = header.innerText.substring(indexOfTicketID, header.innerText.indexOf('\n'));
     let ticketToRender;
 
     // Locate in array
@@ -152,7 +152,7 @@ function cancelEdit(card) {
     let wholeCard = card.parentElement.parentElement;
     let header = wholeCard.querySelector('div.card-header')
     let indexOfTicketID = header.innerText.indexOf('#') + 1;
-    let ticket_id = header.innerText.substring(indexOfTicketID + 1, header.innerText.indexOf('\n'));
+    let ticket_id = header.innerText.substring(indexOfTicketID, header.innerText.indexOf('\n'));
     let ticketToRender;
 
     // Locate in array
