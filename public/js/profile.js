@@ -70,7 +70,10 @@ function issueToString(item) {
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
-            <p class="card-text">${item.ticket_description}</p>`;
+            <p class="card-text">${item.ticket_description}</p>
+            <button type="button" class="btn btn-success" onclick="makeEditable(this)">
+                Edit
+            </button>`;
     if (!item.resolved) {
         res +=
             `
@@ -105,4 +108,8 @@ function issueToString(item) {
 const dateString = (date) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString() + ' at ' + dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+
+function makeEditable(card) {
+    console.log(this.parentElement);
 }

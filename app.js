@@ -221,36 +221,78 @@ app.post(
   }, 
 );
 
+app.get('reset/*', (req, res) => {
+  const key = req.path;
+  console.log(key);
+  const keyLookup = {
+    text: "SELECT json_build_object('key', key, 'user_id', user_id, 'expiration', expiration) FROM reset_key WHERE key = $1",
+    values: [ key ]
+  };
+  client.query(keyLookup, (err, data) => {
+    if (err) { 
+      console.log(err); 
+      return res.render('/login', { errors: 'Password reset request is expired or does not exist' }) 
+    }
+    const key = data.rows[0].json_build_object;
+    if (new Date() > new Date(key.expiration)) {
+      console.log('PWKey is valid');
+      res.sendFile(path.join(__dirname, 'reset'));
+      return;
+    }
+    res.render('/login', { errors: 'Password reset request is expired' });
+  });
+});
+
 app.post(
-  '/resetPassword',
+  '/resetRequest',
   [
     check('email').isEmail().normalizeEmail()
   ], 
   (req, res) => {
   const getUser = {
-    text: "SELECT json_build_object('display_name', display_name) FROM users WHERE email = $1",
+    text: "SELECT json_build_object('display_name', display_name, 'user_id', user_id) FROM users WHERE email = $1",
     values: [req.body.email]
   }; 
   client.query(getUser, (err, data) => {
-    if (err) {  return res.render('/login', { errors: err }) }
+    if (err) { return res.render('/login', { errors: err }); }
+    else if (!data.rows) { return res.render('/login', { errors: 'No email found' }); }
     const User = data.rows[0].json_build_object;
-    const emailBody = require('./emailBody');
-    let mailOptions = {
-      from: 'issuetracker.donotreply@gmail.com',
-      to: req.body.email,
-      subject: 'Password Reset: DO NOT REPLY',
-      text: emailBody(User.display_name, req.protocol + '://' + req.get('host'), uuidv4())
+    if (!User.user_id.includes('/[a-zA-Z]/')) { 
+      return res.render('/login', { errors: 'Cannot update password for Google OAuth User' }); 
+    }
+    const reset_id = uuidv4();
+    const expiration = new Date();
+    expiration.setDate(expiration.getHours() + 2);
+    const insertPasswordKey = {
+      text: "INSERT INTO reset_key (key, user_id, expiration) VALUES ($1, $2, $3)",
+      values: [ reset_id, User.user_id, expiration ]
     };
-    console.log('Sending to', mailOptions.to, '\n', mailOptions.subject, mailOptions.text);
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) { console.log(err); }
-      else {
-        console.log(`Message ${info.messageId} sent ${info.response}`);
-        res.redirect('/login');
-      }
-    });
-  })
-  
+    client.query(insertPasswordKey, (pwErr, pwData) => {
+      if (err) { console.log(err); res.redirect('/failed'); }
+      const emailBody = require('./emailBody');
+      let mailOptions = {
+        from: 'issuetracker.donotreply@gmail.com',
+        to: req.body.email,
+        subject: 'Password Reset: DO NOT REPLY',
+        text: emailBody(User.display_name, req.protocol + '://' + req.get('host'), reset_id)
+      };
+      console.log('Sending to', mailOptions.to, '\n', mailOptions.subject, mailOptions.text);
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) { console.log(err); }
+        else {
+          console.log(`Message ${info.messageId} sent ${info.response}`);
+          res.redirect('/login');
+        }
+      });
+  });
+  });
+});
+
+app.post(
+  '/reset', 
+  [],
+  (req, res) => {
+
 });
 
 // Null user

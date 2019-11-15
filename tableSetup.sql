@@ -7,6 +7,12 @@ CREATE TABLE users (
     last_login TIMESTAMP
 );
 
+CREATE TABLE reset_key (
+    key uuid PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(user_id),
+    expiration TIMESTAMP NOT NULL
+);
+
 CREATE TABLE tickets (
     ticket_id SERIAL PRIMARY KEY,
     created_by TEXT NOT NULL REFERENCES users(user_id),

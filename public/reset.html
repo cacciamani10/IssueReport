@@ -16,8 +16,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/register">Register </a>
@@ -26,42 +26,18 @@
         </div>
     </nav>
     <div class="-form">
-        <form action="/login" method="post">
-            <div class="form-group">    
-                <label for="username">Email or Username</label>
-                <input name="username" id="username" type="text" class="form-control" placeholder="Email or Username" required>
-            </div>
+        <form action="/reset" method="post">
             <div class="form-group">
                 <label for="password">Password</label>
                 <input name="password" id="password" type="password" class="form-control" placeholder="Password" required>
             </div>
+            <div class="form-group">
+                <label for="password-retype">Re-Enter Password</label>
+                <input name="password-retype" id="password-retype" type="password" class="form-control" placeholder="Re-Enter Password" required>
+            </div>
             <button type="submit" class="btn btn-primary mr-4">Submit</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#forgot-password">Forgot My Password</button>
         </form>
-        <div class="modal fade" id="forgot-password" tabindex="-1" role="dialog" aria-labelledby="forgot-password-title" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="forgot-password-title">Forgot Password</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="/resetRequest" method="post">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="email">Enter Your Email</label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-                            </div>
-                        </div>  
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary mr-auto">Send Email</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <hr>
         <form action="/auth/google" method="GET">
             <input type="image" src="img/btn_google_signin_light_focus_web.png" alt="Sign in With Google">
