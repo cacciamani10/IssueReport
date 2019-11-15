@@ -77,7 +77,7 @@ function issueToString(item) {
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
-            <button type="button" class="btn btn-success float-right" onclick="makeEditable(this)">
+            <button type="button" class="btn btn-primary float-right" onclick="makeEditable(this)">
                 Edit
             </button>
             <div class="dropdown-menu" style="margin-left: ($spacer * .25); min-width: 80%;">
