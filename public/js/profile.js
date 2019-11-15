@@ -70,13 +70,13 @@ function issueToString(item) {
         <div class="card-body">
             <h5 class="card-title">${item.ticket_subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
-            <p class="card-text">${item.ticket_description}</p>
-            <button type="button" class="btn btn-success" onclick="makeEditable(this)">
-                Edit
-            </button>`;
+            <p class="card-text">${item.ticket_description}</p>`;
     if (!item.resolved) {
         res +=
             `
+            <button type="button" class="btn btn-success" onclick="makeEditable(this)">
+                Edit
+            </button>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resolve
             </button>
@@ -114,7 +114,56 @@ function makeEditable(card) {
     // Get ticket ID
     let wholeCard = card.parentElement.parentElement;
     let header = wholeCard.querySelector('div.card-header')
-    let indexOfTicketID = header.innerText.indexOf('#');
-    let ticket_id = header.innerText.substring(indexOfTicketID, header.innerText.indexOf(' ', indexOfTicketID + 1));
-    
+    let indexOfTicketID = header.innerText.indexOf('#') + 1;
+    let ticket_id = header.innerText.substring(indexOfTicketID + 1, header.innerText.indexOf('\n'));
+    let ticketToRender;
+
+    // Locate in array
+    issues.forEach(ele => {
+        if (ele.ticket_id == ticket_id) {
+            ticketToRender = ele;
+            return;
+        }
+    });
+    if (ticketToRender == null) { return; }
+
+    // Render new editable card
+    wholeCard.innerHTML = 
+    `<div class="card border-primary shadow" style="margin: 30px 12px;">
+        <div class="card-header" style="font-weight: 500;">
+            Ticket: #${ticketToRender.ticket_id}
+            <span class="badge float-right badge-${ticketToRender.resolved ? 'success">Resolved' : 'warning">Unresolved'}</span>
+        </div>
+        <div class="card-body">
+            <form action="/edit">
+            <input type="text" class="card-title form-control" value="${item.ticket_subject}">
+            <h6 class="card-subtitle mb-2 text-muted">Created by: You</h6>
+            <input type="text" class="card-text form-control" value="${item.ticket_description}">
+            <button type="submit" class="btn btn-primary">Finish</button>
+            <button type="button" class="btn btn-danger" onclick="cancelEdit(this)">
+                Cancel
+            </button>
+        </div>
+    </div>`;
+}
+
+function cancelEdit(card) {
+    // Get ticket ID
+    let wholeCard = card.parentElement.parentElement;
+    let header = wholeCard.querySelector('div.card-header')
+    let indexOfTicketID = header.innerText.indexOf('#') + 1;
+    let ticket_id = header.innerText.substring(indexOfTicketID + 1, header.innerText.indexOf('\n'));
+    let ticketToRender;
+
+    // Locate in array
+    issues.forEach(ele => {
+        if (ele.ticket_id == ticket_id) {
+            ticketToRender = ele;
+            return;
+        }
+    });
+    if (ticketToRender == null) { return; }
+
+    // Render
+    wholeCard.innerHTML = issueToString(ticketToRender);
 }
