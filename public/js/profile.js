@@ -111,5 +111,10 @@ const dateString = (date) => {
 }
 
 function makeEditable(card) {
+    // Get ticket ID
     let wholeCard = card.parentElement.parentElement;
+    let header = wholeCard.querySelector('div.card-header')
+    let indexOfTicketID = header.innerText.indexOf('#');
+    let ticket_id = header.innerText.substring(indexOfTicketID, header.innerText.indexOf(' ', indexOfTicketID + 1));
+    
 }
